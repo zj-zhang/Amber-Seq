@@ -1,0 +1,17 @@
+#!/bin/bash
+parDir="./batch_run_20200117-L4_8_12-Flatten"
+
+fileList=`ls $parDir | grep "tmp_final_*.*" | grep -v "tmp_final_12_5.1"`
+
+for i in $fileList
+do
+#i="tmp_final_12_6.1/"
+  if [ -f $parDir/$i/loss.png ]; then
+    echo "od=$i"
+    for j in `cat ./ldsc_resources/labels_annot/split_chroms.txt`; do
+      #sbatch -J ldsc-$i-$j 3_sbatch_ldsc_l2.sh $parDir/$i $j
+      echo "bash 3_sbatch_ldsc_l2.sh $parDir/$i $j"
+      
+    done
+  fi
+done
