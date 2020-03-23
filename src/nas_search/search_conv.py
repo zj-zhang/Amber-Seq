@@ -7,9 +7,8 @@ from BioNAS.Controller.general_controller import GeneralController
 from BioNAS.Controller.model_space import State, ModelSpace
 from BioNAS.Controller.common_ops import count_model_params
 
-from deepsea_keras.read_data import read_val_data, read_train_data, read_test_data, read_label_annot
+from src.utils.read_data import read_val_data, read_train_data, read_test_data, read_label_annot
 from keras.callbacks import ModelCheckpoint, EarlyStopping
-#from common_func_msk import ROCCallback
 from keras.optimizers import Adam, SGD
 
 from BioNAS.Controller.manager import EnasManager
@@ -18,84 +17,40 @@ from BioNAS.Controller.reward import LossAucReward
 from BioNAS.utils.plots import plot_controller_hidden_states
 import logging
 import pickle
+import json
 
 
-#def get_reward_fn(session, lbd=1, loss_c=None, knowledge_c=None):
-#    from BioNAS.KFunctions.MotifKnowledgeFunc import MotifSaliency, make_output_annot
-#    from pkg_resources import resource_filename
-#    label_annot = read_label_annot()
-#    cat_list = [('TF', 'Pol', 'DNase', 'Histone')]
-#    output_annot = make_output_annot(label_annot, cat_list)
-#    print(output_annot[-1])
-#    msk = MotifSaliency(output_annot, session,
-#                        pos_prop=0.9,
-#                        neg_prop=0.1,
-#                        batch_size=100,
-#                        index_to_letter={0: 'A', 1: 'G', 2: 'C', 3: 'T'},
-#                        filter_motif=True,
-#                        verbose=1)
-#    motif_file = resource_filename('BioNAS.resources', 'rbp_motif/encode_motifs.txt.gz')
-#    msk.knowledge_encoder(motif_file=motif_file)
-#
-#    reward_fn = LossAucReward(method='aupr', knowledge_function=msk, Lambda=lbd, loss_c=loss_c, knowledge_c=knowledge_c)
-#
-#    return reward_fn
-
-
-def get_controller(model_space, session):
+def get_controller(controller_config, model_space, session):
     with tf.device("/cpu:0"):
-        #lr = 0.0 if disable_controller else 0.001
-        lr = 0.001
+        lr = controller_config['learning_rate']
+        if not controller_config['with_input_blocks']:
+            assert  controller_config['num_input_blocks'] == 1
         controller = GeneralController(
             model_space,
             session=session,
-            share_embedding={i:0 for i in range(1, len(model_space))},
-            with_skip_connection=True,
-            with_input_blocks=False,
-            num_input_blocks=1,
-            skip_connection_unique_connection=False,
-            skip_weight=1.0,
-            skip_target=0.4,
-            lstm_size=64,
-            lstm_num_layers=1,
-            kl_threshold=0.01,
-            train_pi_iter=10,
-            #optim_algo=SGD(lr=lr, momentum=True),
+            #share_embedding={i:0 for i in range(1, len(model_space))},
+            share_embedding={int(k): int(v) for k,v in controller_config['share_embedding'].items()},
+            with_skip_connection=controller_config['with_skip_connection'],
+            with_input_blocks=controller_config['with_input_blocks'],
+            num_input_blocks=controller_config['num_input_blocks'],
+            skip_connection_unique_connection=controller_config['skip_connection_unique_connection'],
+            skip_weight=controller_config['skip_weight'],
+            skip_target=controller_config['skip_target'],
+            lstm_size=controller_config['lstm_size'],
+            lstm_num_layers=controller_config['lstm_num_layers'],
+            kl_threshold=controller_config['kl_threshold'],
+            train_pi_iter=controller_config['train_pi_iter'],
             optim_algo='adam',
-            temperature=2.,
+            temperature=controller_config['temperature'],
             lr_init=lr,
             lr_dec_rate=1.0,
-            tanh_constant=1.5,
-            buffer_size=1,  ## num of episodes saved
-            batch_size=20
+            tanh_constant=controller_config['tanh_constant'],
+            buffer_size=controller_config['buffer_size'],
+            batch_size=controller_config['batch_size']
         )
         controller.buffer.rescale_advantage_by_reward = False
     return controller
 
-
-def get_model_space(out_filters=64, num_layers=9, num_pool=4):
-    state_space = ModelSpace()
-    if num_pool == 4:
-        expand_layers = [num_layers//4-1, num_layers//4*2-1, num_layers//4*3-1]
-    elif num_pool == 3:
-        expand_layers = [num_layers//3-1, num_layers//3*2-1]
-    else:
-        raise Exception("Unsupported pooling num: %i"%num_pool)
-    for i in range(num_layers):
-        state_space.add_layer(i, [
-            State('conv1d', filters=out_filters, kernel_size=8, activation='relu'),
-            State('conv1d', filters=out_filters, kernel_size=4, activation='relu'),
-            State('conv1d', filters=out_filters, kernel_size=8, activation='relu', dilation=10),
-            State('conv1d', filters=out_filters, kernel_size=4, activation='relu', dilation=10),
-            # max/avg pool has underlying 1x1 conv
-            State('maxpool1d', filters=out_filters, pool_size=4, strides=1),
-            State('avgpool1d', filters=out_filters, pool_size=4, strides=1),
-            State('identity', filters=out_filters),
-      ])
-        if i in expand_layers:
-            out_filters *= 2
-
-    return state_space
 
 
 def get_controller_config(controller):
@@ -107,17 +62,16 @@ def get_controller_config(controller):
     return d
 
 
-def main(wd, num_layers, gap, disable_controller, verbose):
+def main(wd, model_space, controller_config, gap=False, verbose=0):
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     session = tf.Session(config=config)
     K.set_session(session)
-    out_filters = 32
-    model_space = get_model_space(out_filters=out_filters, num_layers=num_layers, num_pool=4)
-    controller = get_controller(model_space, session=session)
+    out_filters = controller_config['child_base_filters']
+    controller = get_controller(controller_config, model_space, session=session)
     pickle.dump(model_space, open(os.path.join(wd, "model_space.pkl"), "wb"))
-    controller_config = get_controller_config(controller)
-    pickle.dump(controller_config, open(os.path.join(wd, "controller_config.pkl"), "wb") )
+    controller_config_dict = get_controller_config(controller)
+    pickle.dump(controller_config_dict, open(os.path.join(wd, "controller_config.pkl"), "wb") )
 
     #reward_fn = LossAucReward(method='aupr')
     reward_fn = LossAucReward(method='auc')
@@ -128,10 +82,9 @@ def main(wd, num_layers, gap, disable_controller, verbose):
         'loss': 'binary_crossentropy',
         'optimizer': 'adam',
         #'optimizer': SGD(lr=0.1, momentum=0.9, decay=1e-6, nesterov=False),
-        #'metrics': ['acc']
     }
 
-    child_batch_size = 1000
+    child_batch_size = controller_config['child_batch_size']
     model_fn = EnasCnnModelBuilder(
         dag_func='EnasConv1dDAG',
         batch_size=child_batch_size,
@@ -154,7 +107,6 @@ def main(wd, num_layers, gap, disable_controller, verbose):
     )
 
     val_data = read_val_data()
-    #train_data = val_data
     train_data = read_train_data()
 
 
@@ -168,7 +120,6 @@ def main(wd, num_layers, gap, disable_controller, verbose):
         post_processing_fn='minimal',
         model_compile_dict=model_compile_dict,
         working_dir=wd,
-        disable_controller=disable_controller,
         verbose=verbose
         )
 
@@ -186,15 +137,15 @@ def main(wd, num_layers, gap, disable_controller, verbose):
         controller,
         manager,
         logger=logger,
-        max_episode=300,
-        max_step_per_ep=100,
+        max_episode=controller_config['manager_max_episode'],
+        max_step_per_ep=controller_config['manager_max_step_per_ep'],
         working_dir=wd,
-        time_budget="72:00:00",
-        with_input_blocks=False,
-        with_skip_connection=True,
-        child_train_steps=500,
-        child_warm_up_epochs=1,
-        save_controller_every=50
+        time_budget=controller_config['manager_time_budget'],
+        with_input_blocks=controller_config['with_input_blocks'],
+        with_skip_connection=controller_config['with_skip_connection'],
+        child_train_steps=controller_config['child_train_steps'],
+        child_warm_up_epochs=controller_config['child_warm_up_epochs'],
+        save_controller_every=controller_config['save_controller_every']
     )
     try:
         env.train()
@@ -207,20 +158,31 @@ def main(wd, num_layers, gap, disable_controller, verbose):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Command-line arguments for Search')
+    
     parser.add_argument('--working-dir', "--wd", dest='wd', type=str,
                         help='output working dir')
+    
+    parser.add_argument('--model-space', dest="model_space", type=str,
+                        help='filepath to BioNAS model space')
+    
+    parser.add_argument('--controller-config', dest="controller_config", type=str,
+                        help='Conriguration file for controller')
+    
     parser.add_argument('--GAP', dest='gap', default=False,
                         action="store_true",
                         help='use GlobalAveragePool instead of Flatten')
-    parser.add_argument('--layers', dest='layers', type=int, default=12,
-                        help='number of layers in model space')
-    parser.add_argument('--disable-controller', dest='disable_controller',
-                        default=False, action="store_true",
-                        help='disable controller training')
+    
     parser.add_argument('--verbose', dest='verbose', default=1,
                         type=int,
                         help='verbose mode')
 
     args = parser.parse_args()
+    # load data files
+    assert os.path.isfile(args.controller_config)
+    controller_config = json.load(open(args.controller_config, "r"))
+
+    assert os.path.isfile(args.model_space)
+    model_space = pickle.load(open(args.model_space, "rb"))
+
     if args.wd is not None:
-        main(wd=args.wd, num_layers=args.layers, gap=args.gap, disable_controller=args.disable_controller, verbose=args.verbose)
+        main(wd=args.wd, model_space=model_space, controller_config=controller_config, gap=args.gap, verbose=args.verbose)

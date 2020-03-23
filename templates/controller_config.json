@@ -1,0 +1,31 @@
+{
+	"learning_rate": 0.001,
+	"share_embedding": {"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0, "8":0, "9":0, "10":0, "11":0},
+
+	"with_input_blocks": false,
+	"num_input_blocks": 1,
+
+	"with_skip_connection": true,
+	"skip_connection_unique_connection": false,
+	"skip_weight": 1.0,
+	"skip_target": 0.4,
+
+	"lstm_size": 64,
+	"lstm_num_layers": 1,
+	"kl_threshold": 0.01,
+	"train_pi_iter": 10,
+	"temperature": 2.0,
+	"tanh_constant": 1.5,
+	"buffer_size": 1,
+	"batch_size": 20,
+
+	"manager_max_episode": 300,
+	"manager_max_step_per_ep": 100,
+	"manager_time_budget": "8:00:00",
+
+	"child_base_filters": 32,
+	"child_batch_size": 1000,
+	"child_warm_up_epochs": 1,
+	"child_train_steps": 500,
+	"save_controller_every": 50
+}

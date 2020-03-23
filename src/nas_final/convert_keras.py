@@ -4,11 +4,13 @@ and train
 ZZJ
 2020.1.10
 """
+#from __future__ import absolute_import
+
 import os
 import argparse
 import pickle
 import numpy as np
-from search_conv import get_model_space
+from src.utils.model_spacer import get_model_space
 from keras.models import Model
 from keras.layers import Conv1D, Activation, BatchNormalization, Input, \
     MaxPooling1D, AveragePooling1D, Dropout, GlobalAveragePooling1D, Lambda, Add, Dense, Flatten
@@ -20,9 +22,9 @@ from BioNAS.Controller.reward import LossAucReward
 from contextlib import redirect_stdout
 
 # for training
-from deepsea_keras.read_data import read_val_data, read_train_data, read_test_data, read_label_annot
+from src.utils.read_data import read_val_data, read_train_data, read_test_data, read_label_annot
 from keras.callbacks import ModelCheckpoint, EarlyStopping, LearningRateScheduler, ReduceLROnPlateau
-from common_func_msk import ROCCallback, TimeBudgetCallback, read_controller_train_history
+from src.utils.common_func_msk import ROCCallback, TimeBudgetCallback, read_controller_train_history
 from keras.optimizers import Adam, SGD
 from keras.constraints import max_norm
 from keras.utils import multi_gpu_model
