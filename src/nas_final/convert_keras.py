@@ -20,6 +20,7 @@ from BioNAS.Controller.model_space import State, ModelSpace
 from BioNAS.utils.plots import plot_training_history
 from BioNAS.Controller.reward import LossAucReward
 from contextlib import redirect_stdout
+import json
 
 # for training
 from src.utils.read_data import read_val_data, read_train_data, read_test_data, read_label_annot
@@ -243,7 +244,7 @@ def get_num_layers(arc_seq):
     raise Exception("Too many layers (>100)")
 
 
-def main(sd, wd, gpus=1, pooling='Flatten', width_scale_factor=2, disable_controller=False, add_conv1_under_pool=True, verbose=1):
+def main(sd, wd, final_config, gpus=1, pooling='Flatten', width_scale_factor=2, disable_controller=False, add_conv1_under_pool=True, verbose=1):
     # working directory
     if gpus > 1:
         use_multi_gpu = True
@@ -257,10 +258,6 @@ def main(sd, wd, gpus=1, pooling='Flatten', width_scale_factor=2, disable_contro
         print("load pre-computed model_space")
         model_space = pickle.load(open(os.path.join(sd, "model_space.pkl"), "rb"))
     else:
-        #num_pool = 4 if pooling == 'Flatten' else 3
-        #print("use %i times reduction_pooling"%num_pool)
-        #out_filters = 64 * 12 // num_layers
-        #model_space = get_model_space(out_filters, num_layers, num_pool=num_pool)
         raise Exception("cannot find model_space.pkl file")
 
     # read the best architecture
@@ -280,7 +277,7 @@ def main(sd, wd, gpus=1, pooling='Flatten', width_scale_factor=2, disable_contro
         num_layers = get_num_layers(arc_seq)
         print("inferred %i layers" % num_layers)
 
-    dropout_rate = 0.1
+    dropout_rate = final_config.pop("dropout_rate", 0.1)
 
     print("pooling mode is %s"%pooling)
     model = convert(arc_seq, model_space, width_scale_factor, dropout_rate,
@@ -312,7 +309,7 @@ def main(sd, wd, gpus=1, pooling='Flatten', width_scale_factor=2, disable_contro
     earlystopper = EarlyStopping(
         monitor='val_auc',
         mode='max',
-        patience=10,
+        patience=final_config.pop("early_stop_patience", 10),
         verbose=verbose)
 
     lr_scheduler = LearningRateScheduler(lr_schedule)
@@ -322,12 +319,12 @@ def main(sd, wd, gpus=1, pooling='Flatten', width_scale_factor=2, disable_contro
         mode='max',
         factor=np.sqrt(0.1),
         cooldown=0,
-        patience=5,
+        patience=final_config.pop("reduce_lr_patience", 5),
         min_lr=0.5e-6,
         verbose=verbose
     )
 
-    time_budget = TimeBudgetCallback(time_budget="72:00:00", verbose=1)
+    time_budget = TimeBudgetCallback(time_budget=final_config.pop("train_time_budget", "24:00:00"), verbose=1)
 
     # training
     if use_multi_gpu:
@@ -335,7 +332,6 @@ def main(sd, wd, gpus=1, pooling='Flatten', width_scale_factor=2, disable_contro
 
     model.compile(
         loss='binary_crossentropy',
-        #optimizer=SGD(lr=0.1, momentum=0.9, decay=1e-6, nesterov=False),
         optimizer='adam',
         metrics=['acc']
     )
@@ -343,7 +339,7 @@ def main(sd, wd, gpus=1, pooling='Flatten', width_scale_factor=2, disable_contro
     try:
         hist = model.fit(
             train_data[0], train_data[1],
-            epochs=200,
+            epochs=final_config.pop("train_epochs", 200),
             batch_size=1000 * batch_size_multiplier,
             verbose=verbose,
             validation_data=val_data,
@@ -357,7 +353,6 @@ def main(sd, wd, gpus=1, pooling='Flatten', width_scale_factor=2, disable_contro
 
     # testing
     test_data = read_test_data()
-    #print(roc_callback.scorer(model, [test_data[0], [test_data[1]] ] ))
     model.load_weights(model_weight_fp)
     print("training complete; performing evaluation..")
 
@@ -398,6 +393,9 @@ if __name__ == "__main__":
     parser.add_argument('--sd', dest='sd', type=str,
                         help='search dir')
     
+    parser.add_argument('--config', dest='config', type=str,
+                        help='configuration filepath')
+    
     parser.add_argument('--pooling', dest='pooling', type=str,
                         default='Flatten',
                         choices=['GAP', 'Flatten'],
@@ -425,9 +423,13 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     if args.od is not None:
+        assert os.path.isfile(args.config), "Config file not found: %s"%args.config
+        assert args.config.endswith("json"), "Must have a json file for configuration"
+        final_config = json.load(open(args.config, "r"))
         main(
                 wd=args.od,
                 sd=args.sd,
+                final_config=final_config,
                 gpus=args.gpus,
                 pooling=args.pooling,
                 width_scale_factor=args.width_scale_factor,

@@ -21,7 +21,7 @@
 
 	"manager_max_episode": 300,
 	"manager_max_step_per_ep": 100,
-	"manager_time_budget": "8:00:00",
+	"manager_time_budget": "1:00:00",
 
 	"child_base_filters": 32,
 	"child_batch_size": 1000,

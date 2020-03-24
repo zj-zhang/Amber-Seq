@@ -1,0 +1,7 @@
+{
+	"dropout_rate": 0.1,
+	"early_stop_patience": 10,
+	"reduce_lr_patience": 5,
+	"train_time_budget": "0:30:00",
+	"train_epochs": 10
+}
