@@ -1,0 +1,13 @@
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_AID_ALL.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_AID_SURE.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_ALLERGY_ECZEMA_DIAGNOSED.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_ASTHMA_DIAGNOSED.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_CARDIOVASCULAR.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_DERMATOLOGY.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_HI_CHOL_SELF_REP.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_HYPOTHYROIDISM_SELF_REP.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_RESPIRATORY_ENT.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_T2D.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/body_BMIz.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/body_HEIGHTz.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/body_WHRadjBMIz.sumstats.gz.munge.sumstats.gz

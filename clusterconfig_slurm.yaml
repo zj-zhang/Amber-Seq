@@ -1,0 +1,27 @@
+__default__: 
+        queue: genx
+        time: 2:00:00
+        num_nodes: 1
+        ntasks: 1
+        ntasks_per_node: 1
+        mem: 8GB
+
+ldsc_l2_step: 
+        queue : ccb
+        time: 1-6:00:00
+        num_nodes: 1
+        ntasks: 5
+        ntasks_per_node: 5
+        mem: 500GB
+
+
+ldsc_h2_step: 
+        queue : ccb
+        time: 3-12:00:00
+        num_nodes: 5
+        ntasks: 200
+        ntasks_per_node: 40
+        mem: 500GB
+
+
+

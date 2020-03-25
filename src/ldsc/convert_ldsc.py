@@ -6,19 +6,34 @@ import subprocess
 import tempfile
 import gc
 
+import argparse
+
+parser = argparse.ArgumentParser(description="Step 1 of LDSC: convert annotation to L2")
+parser.add_argument("--vep-dir", type=str, help="filepath to vep folder; will automatically find files by suffix")
+parser.add_argument("--chroms", type=str, help="chroms (w/o chr) for the current task")
+parser.add_argument("--label", type=str, help="filepath to the multi-task label annotations")
+parser.add_argument("--ldsc-bfile", type=str, help="filepath to LDSC bfile from plink")
+parser.add_argument("--ldsc-snps", type=str, help="filepath to LDSC SNPs list (e.g. listHM3.txt)")
+parser.add_argument("--ldsc-baselineLD", type=str, help="filepath to LDSC baselineLD folder")
+parser.add_argument("--ldsc-bin", type=str, help="filepath to executable (chmod +x) LDSC python script")
+
+args = parser.parse_args()
+
 # parsed argument
-vep_dir = sys.argv[1]
-chroms_part = sys.argv[2]
+vep_dir = args.vep_dir
+chroms_part = args.chroms
 vep_dir = os.path.realpath(vep_dir)
 
 # script filepath constants
-label_fp = "/mnt/ceph/users/zzhang/DeepSEA/ldsc_resources/labels_annot/total_label_idx.csv"
-ldsc_bfile = "./ldsc_resources/1000G_EUR_QC/1000G_EUR_Phase3_plink/1000G.EUR.QC" # for baselineLD v2.2 and baseline v1.2
-#ldsc_bfile = "./ldsc_resources/1000G_EUR_QC/1000G_Phase1_plinkfiles/1000G_plinkfiles/1000G.mac5eur"  # for baseline v1.2
-ldsc_snps = "./ldsc_resources/HapMap3_SNPs/listHM3.txt"
-#ldsc_temp_dir_obj = tempfile.TemporaryDirectory() #"/scratch/"
-#ldsc_temp_dir = ldsc_temp_dir_obj.name
-ldsc_temp_dir = "./tmp"
+#label_fp = "/mnt/ceph/users/zzhang/DeepSEA/ldsc_resources/labels_annot/total_label_idx.csv"
+label_fp = args.label
+#ldsc_bfile = "./ldsc_resources/1000G_EUR_QC/1000G_EUR_Phase3_plink/1000G.EUR.QC" # for baselineLD v2.2 and baseline v1.2
+ldsc_bfile = args.ldsc_bfile
+#ldsc_snps = "./ldsc_resources/HapMap3_SNPs/listHM3.txt"
+baselineLD_dir = args.ldsc_baselineLD
+ldsc_snps = args.ldsc_snps
+ldsc_temp_dir_obj = tempfile.TemporaryDirectory() # node-local temp fs
+ldsc_temp_dir = ldsc_temp_dir_obj.name
 
 # first step: match abs_diffs to baselineLD SNPs
 print("-"*40+' 1 '+"-"*40)
@@ -27,7 +42,7 @@ convert_to_ldsc_annot(
         vep_dir=vep_dir,
         label_fp=label_fp,
         #baselineLD_dir="/mnt/home/zzhang/ceph/human_SNP/baselineLD/",
-        baselineLD_dir="/mnt/ceph/users/zzhang/human_SNP/1000G_Phase3_baseline_v1.1/baseline_v1.1/", # use baseline v1.2
+        baselineLD_dir=baselineLD_dir,
         output_dir=vep_dir,
         chroms_part=chroms_part,
         use_temp=ldsc_temp_dir
@@ -35,7 +50,8 @@ convert_to_ldsc_annot(
 gc.collect()
 
 # second step: call ldsc to compute ld-score
-ldsc_bin = "./ldsc_resources/ldsc/ldsc.py"
+#ldsc_bin = "./ldsc_resources/ldsc/ldsc.py"
+ldsc_bin = args.ldsc_bin
 print("-"*40+' 2 '+"-"*40)
 print("run ldsc--l2..")
 for chrom in chroms_part.split(','):

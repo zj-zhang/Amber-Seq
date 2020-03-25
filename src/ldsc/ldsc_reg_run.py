@@ -3,23 +3,43 @@ import sys
 import os
 from utils import deepsea_label_name_normalizer
 
-sumstats = sys.argv[1]
-annot_list = sys.argv[2]
-par_dir = sys.argv[3]
+import argparse
+
+parser = argparse.ArgumentParser(description="Step 2 of LDSC: run regression on l2")
+parser.add_argument("--sumstats", type=str, help="filepath to GWAS summary statistics")
+parser.add_argument("--annot-list", type=str, help="A comma-separated string of Annotations to work on")
+parser.add_argument("--par-dir", type=str, help="filepath to parent directory (i.e. project folder)")
+parser.add_argument("--ldsc-frqfile", type=str, help="filepath to LDSC frequency file")
+parser.add_argument("--baselineLD", type=str, help="filepath to baselineLD")
+parser.add_argument("--weight", type=str, help="filepath to LDSC SNP weights")
+parser.add_argument("--ldsc-quantile-M", type=str, help="filepath to executable quantile_M.pl")
+parser.add_argument("--ldsc-quantile-h2g", type=str, help="filepath to executable quantile_h2g.r")
+parser.add_argument("--ldsc-bin", type=str, help="filepath to executable (chmod +x) LDSC python script")
+
+args = parser.parse_args()
+
+sumstats = args.sumstats
+annot_list = args.annot_list
+par_dir = args.par_dir
 
 resume_prev_run = True
-ldsc_bin = "./ldsc_resources/ldsc/ldsc.py"
-ldsc_frqfile =  "./ldsc_resources/frq_file/1000G_Phase3_frq/1000G.EUR.QC."
-ldsc_baselineLD = "./ldsc_resources/baselineLD/baselineLD."
-#ldsc_baselineLD = "/mnt/ceph/users/zzhang/human_SNP/1000G_Phase3_baseline_v1.1/baseline_v1.1/baseline."
-ldsc_weight =  "./ldsc_resources/weight_file/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC."
-ldsc_quantile_M_bin = "./ldsc_resources/ldsc/ContinuousAnnotations/quantile_M.pl"
-ldsc_quantile_h2g_bin = "./ldsc_resources/ldsc/ContinuousAnnotations/quantile_h2g.r"
+#ldsc_bin = "./ldsc_resources/ldsc/ldsc.py"
+ldsc_bin = args.ldsc_bin
+#ldsc_frqfile =  "./ldsc_resources/frq_file/1000G_Phase3_frq/1000G.EUR.QC."
+ldsc_frqfile = args.ldsc_frqfile
+#ldsc_baselineLD = "./ldsc_resources/baselineLD/baselineLD."
+ldsc_baselineLD = args.baselineLD
+#ldsc_weight =  "./ldsc_resources/weight_file/1000G_Phase3_weights_hm3_no_MHC/weights.hm3_noMHC."
+ldsc_weight = args.weight
+#ldsc_quantile_M_bin = "./ldsc_resources/ldsc/ContinuousAnnotations/quantile_M.pl"
+ldsc_quantile_M_bin = args.ldsc_quantile_M
+#ldsc_quantile_h2g_bin = "./ldsc_resources/ldsc/ContinuousAnnotations/quantile_h2g.r"
+ldsc_quantile_h2g_bin = args.ldsc_quantile_h2g
 
 sumstats_prefix = os.path.basename(sumstats).split(".")[0]
-vep_dir = "vep_output" # this used to be "vep_output"
-reg_subdir = "label_wise_ldsc_reg_BaselineLDV2.2_All" #  "label_wise_ldsc_reg_BaselineV2.2"
-reg_dir = os.path.join(par_dir, vep_dir, reg_subdir, sumstats_prefix)
+vep_dir = "vep" # this used to be "vep_output"
+reg_subdir = "label_wise_h2" #  "label_wise_ldsc_reg_BaselineV2.2"
+reg_dir = os.path.join(par_dir, "ldsc", reg_subdir, sumstats_prefix)
 os.makedirs(reg_dir, exist_ok=True)
 
 
