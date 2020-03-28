@@ -10,6 +10,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description="Step 1 of LDSC: convert annotation to L2")
 parser.add_argument("--vep-dir", type=str, help="filepath to vep folder; will automatically find files by suffix")
+parser.add_argument("--out-dir", type=str, help="filepath to folder for outputing L2 files")
 parser.add_argument("--chroms", type=str, help="chroms (w/o chr) for the current task")
 parser.add_argument("--label", type=str, help="filepath to the multi-task label annotations")
 parser.add_argument("--ldsc-bfile", type=str, help="filepath to LDSC bfile from plink")
@@ -23,6 +24,7 @@ args = parser.parse_args()
 vep_dir = args.vep_dir
 chroms_part = args.chroms
 vep_dir = os.path.realpath(vep_dir)
+out_dir = args.out_dir
 
 # script filepath constants
 #label_fp = "/mnt/ceph/users/zzhang/DeepSEA/ldsc_resources/labels_annot/total_label_idx.csv"
@@ -76,12 +78,12 @@ for chrom in chroms_part.split(','):
 # third step: split into label-wise folders
 print("-"*40+' 3 '+"-"*40)
 print("split into output dir..")
-os.makedirs(os.path.join(vep_dir, "label_wise_ldsc"), exist_ok=True)
+os.makedirs(os.path.join(out_dir, "label_wise_ldsc"), exist_ok=True)
 for chrom in chroms_part.split(','):
     print(chrom)
     split_labels_to_folders(
             l2_prefix=os.path.join(ldsc_temp_dir, "joint.{chrom}".format(chrom=chrom) ),
-            output_dir=os.path.join(vep_dir, "label_wise_ldsc")
+            output_dir=os.path.join(out_dir, "label_wise_ldsc")
             )
     shutil.move(os.path.join(ldsc_temp_dir, "joint.%s.log"%chrom), os.path.join(vep_dir, "joint.%s.log"%chrom))
 
