@@ -33,6 +33,7 @@ rule all:
 	input:
 		#"outputs/{project}/vep/".format(project=PROJECT) + config['vep']['vcf_prefix'] + "_abs_diffs.h5"
 		["outputs/{project}/asb/{binding_type}/allelic_imbalance_summary.tsv".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance']],
+		["outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance']],
 		"outputs/{project}/ldsc/label_wise_l2/done.txt".format(project=PROJECT),
 		"outputs/{project}/ldsc/label_wise_h2/done.txt".format(project=PROJECT) 
 
@@ -128,6 +129,21 @@ rule allelic_imbalance_analysis:
 		"--out  {output} "
 
 
+rule allelic_plot:
+	input:
+		"outputs/{project}/asb/{binding_type}/allelic_imbalance_summary.tsv"
+	
+	output:
+		"outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf"
+	
+	params:
+		input_random_fp = lambda wildcards: config["allelic_imbalance"][wildcards.binding_type]['random_fp'],
+		output_prefix = "outputs/{project}/asb/{binding_type}/{binding_type}"
+	
+	shell:
+		"Rscript R/allelic_plot.R {input} {params.input_random_fp} {params.output_prefix}"
+
+
 rule ldsc_l2_step:
 	# NOTE: in order to use disbatch, the command-line are written to a text file;
 	# to just run it, remove the echo at the header
@@ -208,4 +224,5 @@ rule ldsc_h2_step:
 		"done\n done\n "
 		"disBatch.py -p {params.output_prefix} {params.cmd_list} \n"
 		"echo `date` Done > {output}"
+
 
