@@ -40,6 +40,11 @@ def read_test_data():
 
 
 def read_label_annot():
+    label_annot = pd.read_table("./templates/label_annot_index.tsv")
+    return label_annot
+
+
+def read_label_annot_raw():
     label_annot = pd.DataFrame(columns=[
         'index',
         'cell',

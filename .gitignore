@@ -2,6 +2,7 @@
 outputs/
 data/
 .snakemake/
+slurm-*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

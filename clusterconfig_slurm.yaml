@@ -1,10 +1,46 @@
 __default__: 
         queue: genx
-        time: 2:00:00
+        time: 1-0
         num_nodes: 1
         ntasks: 1
         ntasks_per_node: 1
         mem: 8GB
+
+nas_search:
+        queue: gpu
+        gres: gpu:v100-32gb:1
+        time: 1-0
+        num_nodes: 1
+        ntasks: 1
+        ntasks_per_node: 1
+        mem: 100GB
+
+nas_final:
+        queue: gpu
+        gres: gpu:v100-32gb:1
+        time: 1-0
+        num_nodes: 1
+        ntasks: 1
+        ntasks_per_node: 1
+        mem: 100GB
+
+nas_sample:
+        queue: gpu
+        gres: gpu:v100-32gb:1
+        time: 1-0
+        num_nodes: 1
+        ntasks: 1
+        ntasks_per_node: 1
+        mem: 100GB
+
+variant_effect_prediction:
+        queue: gpu
+        gres: gpu:v100-32gb:1
+        time: 1-0
+        num_nodes: 1
+        ntasks: 1
+        ntasks_per_node: 1
+        mem: 100GB
 
 ldsc_l2_step: 
         queue : ccb
@@ -14,7 +50,6 @@ ldsc_l2_step:
         ntasks_per_node: 5
         mem: 500GB
 
-
 ldsc_h2_step: 
         queue : ccb
         time: 3-12:00:00
@@ -22,6 +57,16 @@ ldsc_h2_step:
         ntasks: 200
         ntasks_per_node: 40
         mem: 500GB
+
+allelic_imbalance_analysis: 
+        queue : ccb
+        time: 1-0
+        num_nodes: 1
+        ntasks: 1
+        ntasks_per_node: 1
+        mem: 200GB
+
+
 
 
 

@@ -5,7 +5,7 @@
 
 library(ggplot2)
 library(ggrepel)
-source("darts_theme.R")
+source("./R/darts_theme.R")
 
 get_phenotype_ldsr = function(par_dir, annot_df=NULL, p.adj.method='bonferroni'){
 	sub_dir = list.dirs(par_dir, recursive=F)
@@ -259,15 +259,10 @@ main = function()
 			   res1$version %in% c( "V2.2")  
 		   ),]
 
-	# DEPRECATED 2020.3.18: now can correlate this with NumEnrichedBaseline. ZZ
-	# only look at disease related traits
-	#res1 = res1[ which(! res1$pht %in% c("body_BMIz", "body_HEIGHTz", "body_WHRadjBMIz") ) , ]
-
 	res1$model_enrichment_val = log(res1$model_enrichment_val.1) - log(res1$model_enrichment_val.2)
 	res1$category = "Disease"
 	res1$category[which(res1$pht %in% c("body_BMIz", "body_HEIGHTz", "body_WHRadjBMIz"))] = "Trait"	
 
-	#res1$pht = sapply(res1$pht, rename_fn)
 	res1$pht2 = rename_fn(res1$pht)
 	summary_data = read.table("./batch_run_figures/4_ldsc/delta_enrichment_VS_baseline.tsv", header=T, sep="\t")
 	res1$pht2 = factor(res1$pht2, levels = rename_fn() )
@@ -298,13 +293,9 @@ main = function()
 			   res2$version %in% c("V2.2")
 		   ),]
 
-	# DEPRECATED 2020.3.18: now can correlate this with NumEnrichedBaseline. ZZ
-	# only look at disease related traits
-	#res2 = res2[ which(! res2$pht %in% c("body_BMIz", "body_HEIGHTz", "body_WHRadjBMIz") ) , ]
-	
+
 	res2$category = "Disease"
 	res2$category[which(res2$pht %in% c("body_BMIz", "body_HEIGHTz", "body_WHRadjBMIz"))] = "Trait"	
-	#res2$pht = sapply(res2$pht, rename_fn)
 	res2$pht2 = rename_fn(res2$pht)
 	res2$pht2 = factor(res2$pht2, levels=rename_fn())
 
@@ -323,39 +314,7 @@ main = function()
 	write.table(res1, "./batch_run_figures/4_ldsc/delta_enrichment.tsv", sep="\t", quote=F, row.names=F)
 	write.table(res2, "./batch_run_figures/4_ldsc/delta_coef.tsv", sep="\t", quote=F, row.names=F)
 
-	# DO NOT USE BELOW
-	# PLOT detailed HEIGHT / osteoblast	
-	#idx = grep("Osteoblast", res$label_name)
-	#height = res[intersect(idx, which(res$pht=="body_HEIGHTz")),]
-
-	#height1 = height[height$version %in% c("V1.1"),]
-	#height1 = height1[height1$model_enrichment_P.1<0.05 & height1$model_enrichment_P.2<0.05,]
-	#height1 = rbind.data.frame(
-	#	data.frame(label_name=height1$label_name, model="BioNAS", enrichment_val=height1$model_enrichment_val.1, enrichment_P=height1$model_enrichment_P.1, std=height1$model_enrichment_std.1),
-	#	data.frame(label_name=height1$label_name, model="RSA", enrichment_val=height1$model_enrichment_val.2, enrichment_P=height1$model_enrichment_P.2, std=height1$model_enrichment_std.2),
-	#	stringsAsFactors=F
-	#)
-
-	#p3 = ggplot(height1, aes(x=label_name, y=enrichment_val, fill=model)) + 
-	#	geom_bar(stat="identity", position=position_dodge(0.9)) + 
-	#	geom_errorbar(aes(ymax=enrichment_val+std, ymin=enrichment_val-std), width=0.2, position=position_dodge(0.9)) + 
-	#	Darts_theme +
-	#	theme(axis.text.x=element_text(angle=90, hjust=1, vjust=1))
-	
 
 }
 
 
-
-main_old = function()
-{
-	annot_df = read.table("./ldsc_resources/labels_annot/total_label_idx.csv", header=T, sep="\t")
-
-	res_df = get_model_ldsr("./batch_run_20200212-L12-Dilated10/tmp_final_12_5/vep_output/label_wise_ldsc_reg", out_dir="./batch_run_figures/4_ldsc/final_12_5/")
-	p1 = plot_model_wise_hits(res_df, annot_df)
-	ggsave(p1, file="./batch_run_figures/4_ldsc/final_12_5.summary.pdf")
-
-	res_df2 = get_model_ldsr("./batch_run_20200212-L12-Dilated10/tmp_final_12_1.Random/vep_output/label_wise_ldsc_reg", out_dir="./batch_run_figures/4_ldsc/final_12_1.Random/")
-	p2 = plot_model_wise_hits(res_df2, annot_df)
-	ggsave(p2, file="./batch_run_figures/4_ldsc/final_12_1_Random.summary.pdf")
-}

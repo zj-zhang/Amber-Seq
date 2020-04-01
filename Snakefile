@@ -24,6 +24,7 @@ CONFIG_FP = os.path.join("outputs", PROJECT, 'config', 'config.yaml')
 PYTHONPATH = os.path.abspath(os.getcwd())
 print("python path: ", PYTHONPATH)
 CHROM_PARTS = ["1,10,11,20", "2,9,12,19", "3,8,13,18", "4,7,14,17,22", "5,6,15,16,21"]
+MODEL_TYPES = ['nas_final', 'nas_sample']
 
 configfile:
 	CONFIG_FP
@@ -31,12 +32,21 @@ configfile:
 
 rule all:
 	input:
-		#"outputs/{project}/vep/".format(project=PROJECT) + config['vep']['vcf_prefix'] + "_abs_diffs.h5"
-		["outputs/{project}/asb/{binding_type}/allelic_imbalance_summary.tsv".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance']],
-		["outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance']],
-		"outputs/{project}/ldsc/label_wise_l2/done.txt".format(project=PROJECT),
-		"outputs/{project}/ldsc/label_wise_h2/done.txt".format(project=PROJECT) 
-
+		# NAS outputs 
+		#"outputs/{project}/nas_search/train_history.png".format(project=PROJECT),
+		#"outputs/{project}/nas_final/metrics.log".format(project=PROJECT),
+		#"outputs/{project}/nas_sample/metrics.log".format(project=PROJECT),
+		# Allelic imbalance outputs
+		["outputs/{project}/asb/{model_type}/{binding_type}/allelic_imbalance_summary.tsv".format(project=PROJECT, binding_type=x, model_type=y) for x in config['allelic_imbalance'] for y in MODEL_TYPES ],
+		["outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance'] ],
+		
+		# LDSC rule outputs
+		["outputs/{project}/ldsc/{model_type}/label_wise_l2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
+		["outputs/{project}/ldsc/{model_type}/label_wise_h2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
+		
+		# NAS evaluations
+		"outputs/{project}/nas_eval/search/PCA_1-2_embed.png".format(project=PROJECT),
+		"outputs/{project}/nas_eval/final/raw.tsv".format(project=PROJECT)
 
 
 
@@ -60,6 +70,20 @@ rule nas_search:
 		"--controller-config {params.controller_config_fp} --verbose 2"
 
 
+rule plot_search:
+	input:
+		"outputs/{project}/nas_search/train_history.png"
+	output:
+		"outputs/{project}/nas_eval/search/PCA_1-2_embed.png"
+	params:
+		search_dir = "outputs/{project}/nas_search",
+		out_dir = "outputs/{project}/nas_eval/search",
+		controller_config_fp = config['nas_search']['controller_config_fp'],
+	shell:
+		"export PYTHONPATH="+PYTHONPATH+"\n"
+		"python src/nas_search/search_plot.py {params.search_dir} {params.out_dir} {params.controller_config_fp}"
+
+
 rule nas_final:
 	input:
 		"outputs/{project}/nas_search/train_history.png"
@@ -73,35 +97,74 @@ rule nas_final:
 		width_scale_factor = config['nas_final']['width_scale_factor'],
 		sd = "outputs/{project}/nas_search/",
 		od = "outputs/{project}/nas_final/",
-		pypath = PYTHONPATH
 
 	log:
 		"outputs/{project}/logs/final.log"
 
 	shell:
-		"export PYTHONPATH={params.pypath}\n"
+		"export PYTHONPATH="+PYTHONPATH+"\n"
 		"python -u src/nas_final/convert_keras.py --config {params.final_config_fp} "
 		"--gpus 1 "
-	       	"--sd {params.sd} --od {params.od} --verbose 2 --wsf {params.width_scale_factor}"
+	       	"--sd {params.sd} --od {params.od} --verbose 2 --wsf {params.width_scale_factor} "
+		" > {params.od}/log.txt"
+
+
+rule nas_sample:
+	input:
+		"outputs/{project}/nas_search/train_history.png"
+	
+	output:
+		"outputs/{project}/nas_sample/metrics.log"
+	
+	params:
+		final_config_fp = config['nas_final']['final_train_config_fp'],
+		gpus = config['nas_final']['num_gpus'],
+		width_scale_factor = config['nas_final']['width_scale_factor'],
+		sd = "outputs/{project}/nas_search/",
+		od = "outputs/{project}/nas_sample/"
+
+	shell:
+		"export PYTHONPATH="+PYTHONPATH+"\n"
+		"python -u src/nas_final/convert_keras.py --config {params.final_config_fp} "
+		"--gpus 1 "
+		"--disable-controller "
+	       	"--sd {params.sd} --od {params.od} --verbose 2 --wsf {params.width_scale_factor} "
+		" > {params.od}/log.txt"
+
+
+rule plot_final:
+	input:
+		final_model = "outputs/{project}/nas_final/metrics.log",
+		samp_model = "outputs/{project}/nas_sample/metrics.log"
+	
+	output:
+		"outputs/{project}/nas_eval/final/raw.tsv"
+	
+	params:
+		par_dir = "outputs/{project}/",
+		od = "outputs/{project}/nas_eval/final/"
+	
+	shell:
+		"python src/nas_final/final_plot.py --par-dir {params.par_dir} --od {params.od}"
+
 
 
 rule variant_effect_prediction:
 	input:
-		"outputs/{project}/nas_final/metrics.log"
+		"outputs/{project}/{model_type}/metrics.log"
 
 	output:
-		"outputs/{project}/vep/" + config['vep']['vcf_prefix'] + "_abs_diffs.h5"
+		"outputs/{project}/vep/{model_type}/" + config['vep']['vcf_prefix'] + "_abs_diffs.h5"
 
 	params:
-		model_path = "outputs/{project}/nas_final/bestmodel.h5",
-		output_dir = "outputs/{project}/vep/",
+		model_path = "outputs/{project}/{model_type}/bestmodel.h5",
+		output_dir = "outputs/{project}/vep/{model_type}",
 		genome_fp = config['vep']['genome_fp'],
 		vcf_fp = config['vep']['vcf_fp'],
 		label_annot_fp = config['vep']['label_annot_fp'],
-		pypath = PYTHONPATH
 	
 	shell:
-		"export PYTHONPATH={params.pypath}\n"
+		"export PYTHONPATH="+PYTHONPATH+"\n"
 		"python src/asb/vep.py --model {params.model_path} "
 		"--od {params.output_dir} "
 		"--genome {params.genome_fp} "
@@ -113,13 +176,13 @@ rule allelic_imbalance_analysis:
 	# NOTE: for now, this rule relies on a pre-existing file that maps each 
 	# Allelic imbalance SNP to a pair of Col/Row index in the h5py file
 	input:
-		"outputs/{project}/vep/" + config['vep']['vcf_prefix'] + "_abs_diffs.h5"
+		"outputs/{project}/vep/{model_type}/" + config['vep']['vcf_prefix'] + "_abs_diffs.h5"
 	
 	output:
-		"outputs/{project}/asb/{binding_type}/allelic_imbalance_summary.tsv"
+		"outputs/{project}/asb/{model_type}/{binding_type}/allelic_imbalance_summary.tsv"
 	
 	params:
-		vep_prefix = "outputs/{project}/vep/" + config['vep']['vcf_prefix'],
+		vep_prefix = "outputs/{project}/vep/{model_type}/" + config['vep']['vcf_prefix'],
 		ref_pkl = lambda wildcards: config["allelic_imbalance"][wildcards.binding_type]['ref_pkl']
 
 	shell:
@@ -129,41 +192,41 @@ rule allelic_imbalance_analysis:
 		"--out  {output} "
 
 
-rule allelic_plot:
+rule plot_asb:
 	input:
-		"outputs/{project}/asb/{binding_type}/allelic_imbalance_summary.tsv"
+		inp_search = "outputs/{project}/asb/nas_final/{binding_type}/allelic_imbalance_summary.tsv",
+		inp_samp = "outputs/{project}/asb/nas_sample/{binding_type}/allelic_imbalance_summary.tsv"
 	
 	output:
 		"outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf"
 	
 	params:
-		input_random_fp = lambda wildcards: config["allelic_imbalance"][wildcards.binding_type]['random_fp'],
 		output_prefix = "outputs/{project}/asb/{binding_type}/{binding_type}"
 	
 	shell:
-		"Rscript R/allelic_plot.R {input} {params.input_random_fp} {params.output_prefix}"
+		"Rscript R/allelic_plot.R {input.inp_search} {input.inp_samp} {params.output_prefix}"
 
 
 rule ldsc_l2_step:
 	# NOTE: in order to use disbatch, the command-line are written to a text file;
 	# to just run it, remove the echo at the header
 	input:
-		"outputs/{project}/vep/" + config['vep']['vcf_prefix'] + "_abs_diffs.h5"
+		"outputs/{project}/vep/{model_type}/" + config['vep']['vcf_prefix'] + "_abs_diffs.h5"
 	
 	output:
-		"outputs/{project}/ldsc/label_wise_l2/done.txt"
+		"outputs/{project}/ldsc/{model_type}/label_wise_l2/done.txt"
 	
 	params:
-		cmd_list = "outputs/{project}/ldsc/label_wise_l2/ldsc_l2.cmd_list.txt",
+		cmd_list = "outputs/{project}/ldsc/{model_type}/label_wise_l2/ldsc_l2.cmd_list.txt",
 		chrom_parts_fp = config["ldsc"]["chrom_parts_fp"],
-		vep_dir = "outputs/{project}/vep/",
-		output_dir = "outputs/{project}/ldsc/label_wise_h2/",
+		vep_dir = "outputs/{project}/vep/{model_type}/",
+		output_dir = "outputs/{project}/ldsc/{model_type}/label_wise_l2/",
 		label = config['ldsc']['label_fp'],
 		ldsc_bfile = config['ldsc']['bfile'],
 		ldsc_snps = config['ldsc']['snps'],
 		ldsc_baselineLD = config['ldsc']['baselineLD'],
 		ldsc_bin = config['ldsc']['bin'],
-		output_prefix = "outputs/{project}/ldsc/label_wise_l2/disbatch_run_l2"	
+		output_prefix = "outputs/{project}/ldsc/{model_type}/label_wise_l2/disbatch_run_l2"	
 	
 	shell:
 		"export PYTHONPATH="+PYTHONPATH+"\n"
@@ -182,19 +245,19 @@ rule ldsc_l2_step:
 		"--ldsc-bin {params.ldsc_bin} "
 		" >> {params.cmd_list} \n"
 		"done\n"
-		"#disBatch.py -p {params.output_prefix} {params.cmd_list}\n"
+		"disBatch.py -p {params.output_prefix} {params.cmd_list}\n"
 		"echo `date` Done > {output}"
 
 
 rule ldsc_h2_step:
 	input:
-		"outputs/{project}/ldsc/label_wise_l2/done.txt"
+		"outputs/{project}/ldsc/{model_type}/label_wise_l2/done.txt"
 	
 	output:
-		"outputs/{project}/ldsc/label_wise_h2/done.txt"
+		"outputs/{project}/ldsc/{model_type}/label_wise_h2/done.txt"
 
 	params:
-		cmd_list = "outputs/{project}/ldsc/label_wise_h2/ldsc_h2.cmd_list.txt",
+		cmd_list = "outputs/{project}/ldsc/{model_type}/label_wise_h2/ldsc_h2.cmd_list.txt",
 		par_dir = "outputs/{project}",
 		sumstats_fp = config['ldsc']['sumstats'],
 		annot_fp = config['ldsc']['distinct_labels_fp'],
@@ -204,7 +267,7 @@ rule ldsc_h2_step:
 		ldsc_bin = config['ldsc']['bin'],
 		ldsc_quantile_M = config['ldsc']['quantile_M'],
 		ldsc_quantile_h2g = config['ldsc']['quantile_h2g'],
-		output_prefix = "outputs/{project}/ldsc/label_wise_h2/disbatch_run_h2"
+		output_prefix = "outputs/{project}/ldsc/{model_type}/label_wise_h2/disbatch_run_h2"
 
 	shell:
 		"export PYTHONPATH="+PYTHONPATH+"\n"

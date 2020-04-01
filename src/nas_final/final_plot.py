@@ -9,25 +9,10 @@ import sys
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from scorer import main as scorer_main
-from utils import run_from_ipython
+from src.nas_final.scorer import main as scorer_main
+from src.utils import run_from_ipython
+import argparse
 
-
-def read_keras_old(fp):
-    with open(fp, "r") as f:
-        best_val = 0
-        for line in f:
-            if not line.startswith("Epoch"):
-                continue
-            ele = line.split(', ')
-            if len(ele)<2 or not ele[1].startswith("auc"):
-                continue
-            this_auc = float(ele[1].split('=')[1])
-            #print(line); print(this_auc)
-            if this_auc > best_val:
-                best_val = this_auc
-        test_auc = float(line.split()[0].strip("(),"))
-    return best_val, test_auc
 
 def read_keras_new(fp):
     # updated keras should have the "metrics.log" 
@@ -67,7 +52,8 @@ def read_keras_params(fp):
 
 
 def read_batch_run(par_dir, add_baseline=False):
-    runs = [x for x in os.listdir(par_dir) if x.startswith("tmp_final")]
+    #runs = [x for x in os.listdir(par_dir) if x.startswith("tmp_final")]
+    runs = ['nas_final', 'nas_sample']
     vals_auc = []
     vals_aupr = []
     tests_auc = []
@@ -76,13 +62,7 @@ def read_batch_run(par_dir, add_baseline=False):
     params = []
     train_time = []
     for r in runs:
-        # old final writer/logger that is no longer used
-        #fp = [x for x in os.listdir(os.path.join(par_dir, r)) if x.startswith("final")]
-        #assert len(fp) == 1
-        #fp = fp[0]
-        #metrics = read_keras_old(os.path.join(par_dir, r, fp))
-
-        # use updated folder structures reader; zz 2020.2.19
+       # use updated folder structures reader; zz 2020.2.19
         fp = "log.txt"
         metrics = read_keras_new(os.path.join(par_dir, r, fp))
         vals_auc.append(metrics['val_auc'])
@@ -147,16 +127,21 @@ def plot_batch_run_by_order(df, savefn=None):
 
 
 def main():
-    par_output_dir = "./batch_run_figures"
-    od = os.path.join(par_output_dir, "1_final")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--par-dir", type=str, help="parent folder path")
+    parser.add_argument("--od", type=str, help="output folder")
+    args = parser.parse_args()
+
+    od = args.od
     os.makedirs(od, exist_ok=True)
-    df = read_batch_run("./batch_run_20200212-L12-Dilated10")
+    df = read_batch_run(args.par_dir)
     plot_batch_run_by_order(df, os.path.join(od, "raw.png"))
     df.to_csv(os.path.join(od, "raw.tsv"), sep="\t", index=False)
 
     for i in range(df.shape[0]):
         this = df.iloc[i]['runs']
-        scorer_main(model_fp=os.path.join("./batch_run_20200212-L12-Dilated10", this, "bestmodel.h5"), fn=os.path.join("./batch_run_figures/2_final/scorer_output", "%s.scorer_output.txt"%this))
+        scorer_main(model_fp=os.path.join(args.par_dir, this, "bestmodel.h5"), fn=os.path.join(args.od, "%s.scorer_output.txt"%this))
+
 
 
 if __name__ == "__main__":

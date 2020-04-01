@@ -4,9 +4,9 @@ from BioNAS.Controller.reward import LossAucReward
 from BioNAS.Interpret.scores import PrecisionAtRecall, TprAtFpr
 import tensorflow as tf
 import keras.backend as K
-from common_func_msk import read_label_annot, make_output_annot, MotifSaliency, resource_filename
+from src.utils.common_func_msk import read_label_annot, make_output_annot, MotifSaliency, resource_filename
 from keras.models import load_model
-from deepsea_keras.read_data import read_test_data
+from src.utils.read_data import read_test_data
 
 s = tf.Session()
 K.set_session(s)

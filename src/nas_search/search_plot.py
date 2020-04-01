@@ -8,7 +8,7 @@ import sys
 import tensorflow as tf
 import pickle
 import json
-from search_conv import get_controller
+from src.nas_search.search_conv import get_controller
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
@@ -158,10 +158,10 @@ def main_batch_run(batch_run_dir):
         #tsne_embed(emb, model_space, savefn=os.path.join(sd, "tSNE_embed.png"), random_state=777)
 
 
-def main(sd, od):
+def main(sd, od, controller_config):
     session = tf.Session()
     model_space = pickle.load(open(os.path.join(sd, "model_space.pkl"),"rb"))
-    controller = get_controller(model_space, session)
+    controller = get_controller(controller_config, model_space, session)
     weights_dict = load_controller(controller, sd)
     emb = weights_dict["controller/create_weights/emb/layer_0/w_start:0"]
     princomp_embed(emb, model_space, pc_indices=[0,1], savefn=os.path.join(od, "PCA_1-2_embed.png"), save_data=True)
@@ -173,8 +173,11 @@ def main(sd, od):
 if __name__ == "__main__":
     sd, od = sys.argv[1], sys.argv[2]
     if od != "None":
-        main(sd, od)
+        print("analyze for a single run")
+        controller_config = json.load(open(sys.argv[3], "r"))
+        main(sd, od, controller_config)
     else:
+        print("analyze for a batch run")
         batch_run_dir = sys.argv[1]
         if batch_run_dir:
              main_batch_run(batch_run_dir)
