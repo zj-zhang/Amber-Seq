@@ -7,6 +7,7 @@ project=$1
 touch outputs/$project/config/*
 find outputs/$project/nas_search/ -exec touch {} \;
 find outputs/$project/nas_final/ -exec touch {} \;
+find outputs/$project/nas_sample/ -exec touch {} \;
 find outputs/$project/vep/ -exec touch {} \;
 find outputs/$project/asb/* -exec touch {} \;
 touch outputs/$project/ldsc/label_wise_l2/done.txt

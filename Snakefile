@@ -37,16 +37,14 @@ rule all:
 		#"outputs/{project}/nas_final/metrics.log".format(project=PROJECT),
 		#"outputs/{project}/nas_sample/metrics.log".format(project=PROJECT),
 		# Allelic imbalance outputs
-		["outputs/{project}/asb/{model_type}/{binding_type}/allelic_imbalance_summary.tsv".format(project=PROJECT, binding_type=x, model_type=y) for x in config['allelic_imbalance'] for y in MODEL_TYPES ],
-		["outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance'] ],
-		
+		#["outputs/{project}/asb/{model_type}/{binding_type}/allelic_imbalance_summary.tsv".format(project=PROJECT, binding_type=x, model_type=y) for x in config['allelic_imbalance'] for y in MODEL_TYPES ],
+		#["outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance'] ],
 		# LDSC rule outputs
 		["outputs/{project}/ldsc/{model_type}/label_wise_l2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
 		["outputs/{project}/ldsc/{model_type}/label_wise_h2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
-		
 		# NAS evaluations
-		"outputs/{project}/nas_eval/search/PCA_1-2_embed.png".format(project=PROJECT),
-		"outputs/{project}/nas_eval/final/raw.tsv".format(project=PROJECT)
+		#"outputs/{project}/nas_eval/search/PCA_1-2_embed.png".format(project=PROJECT),
+		#"outputs/{project}/nas_eval/final/raw.tsv".format(project=PROJECT)
 
 
 
@@ -224,7 +222,7 @@ rule ldsc_l2_step:
 		label = config['ldsc']['label_fp'],
 		ldsc_bfile = config['ldsc']['bfile'],
 		ldsc_snps = config['ldsc']['snps'],
-		ldsc_baselineLD = config['ldsc']['baselineLD'],
+		ldsc_baselineLD = config['ldsc']['baselineLD_dir'],
 		ldsc_bin = config['ldsc']['bin'],
 		output_prefix = "outputs/{project}/ldsc/{model_type}/label_wise_l2/disbatch_run_l2"	
 	
@@ -258,7 +256,7 @@ rule ldsc_h2_step:
 
 	params:
 		cmd_list = "outputs/{project}/ldsc/{model_type}/label_wise_h2/ldsc_h2.cmd_list.txt",
-		par_dir = "outputs/{project}",
+		par_dir = "outputs/{project}/ldsc/{model_type}/",
 		sumstats_fp = config['ldsc']['sumstats'],
 		annot_fp = config['ldsc']['distinct_labels_fp'],
 		ldsc_baselineLD = config['ldsc']['baselineLD'],

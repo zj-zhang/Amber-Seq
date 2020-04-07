@@ -37,9 +37,9 @@ ldsc_quantile_M_bin = args.ldsc_quantile_M
 ldsc_quantile_h2g_bin = args.ldsc_quantile_h2g
 
 sumstats_prefix = os.path.basename(sumstats).split(".")[0]
-vep_dir = "ldsc/label_wise_l2" # this used to be "vep_output"
+vep_dir = "label_wise_l2" # this used to be "vep_output"
 reg_subdir = "label_wise_h2" #  "label_wise_ldsc_reg_BaselineV2.2"
-reg_dir = os.path.join(par_dir, "ldsc", reg_subdir, sumstats_prefix)
+reg_dir = os.path.join(par_dir, reg_subdir, sumstats_prefix)
 os.makedirs(reg_dir, exist_ok=True)
 
 
