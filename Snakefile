@@ -22,7 +22,7 @@ PROJECT = os.environ.get("PROJECT")
 assert PROJECT is not None and len(PROJECT)>0, "must provide `$PROJECT`, e.g. `PROJECT=test snakemake -n`"
 CONFIG_FP = os.path.join("outputs", PROJECT, 'config', 'config.yaml')
 PYTHONPATH = os.path.abspath(os.getcwd())
-print("python path: ", PYTHONPATH)
+#print("python path: ", PYTHONPATH)
 CHROM_PARTS = ["1,10,11,20", "2,9,12,19", "3,8,13,18", "4,7,14,17,22", "5,6,15,16,21"]
 MODEL_TYPES = ['nas_final', 'nas_sample']
 
@@ -38,13 +38,13 @@ rule all:
 		#"outputs/{project}/nas_sample/metrics.log".format(project=PROJECT),
 		# Allelic imbalance outputs
 		#["outputs/{project}/asb/{model_type}/{binding_type}/allelic_imbalance_summary.tsv".format(project=PROJECT, binding_type=x, model_type=y) for x in config['allelic_imbalance'] for y in MODEL_TYPES ],
-		#["outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance'] ],
+		["outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance'] ],
 		# LDSC rule outputs
 		["outputs/{project}/ldsc/{model_type}/label_wise_l2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
 		["outputs/{project}/ldsc/{model_type}/label_wise_h2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
 		# NAS evaluations
-		#"outputs/{project}/nas_eval/search/PCA_1-2_embed.png".format(project=PROJECT),
-		#"outputs/{project}/nas_eval/final/raw.tsv".format(project=PROJECT)
+		"outputs/{project}/nas_eval/search/PCA_1-2_embed.png".format(project=PROJECT),
+		"outputs/{project}/nas_eval/final/raw.tsv".format(project=PROJECT)
 
 
 
