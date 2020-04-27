@@ -1,5 +1,5 @@
-/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_ALLERGY_ECZEMA_DIAGNOSED.sumstats.gz.munge.sumstats.gz
-/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_ASTHMA_DIAGNOSED.sumstats.gz.munge.sumstats.gz
-/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_RESPIRATORY_ENT.sumstats.gz.munge.sumstats.gz
-/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/body_BMIz.sumstats.gz.munge.sumstats.gz
-/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/body_HEIGHTz.sumstats.gz.munge.sumstats.gz
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_ALLERGY_ECZEMA_DIAGNOSED.sumstats.gz.munge.sumstats.gz	Eczema
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_ASTHMA_DIAGNOSED.sumstats.gz.munge.sumstats.gz	Asthma
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/disease_RESPIRATORY_ENT.sumstats.gz.munge.sumstats.gz	Respiratory-ENT
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/body_BMIz.sumstats.gz.munge.sumstats.gz	BMI
+/mnt/ceph/users/zzhang/UKBB/AlkesPriceLab/selected/body_HEIGHTz.sumstats.gz.munge.sumstats.gz	Height

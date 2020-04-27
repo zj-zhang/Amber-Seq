@@ -23,7 +23,7 @@ assert PROJECT is not None and len(PROJECT)>0, "must provide `$PROJECT`, e.g. `P
 CONFIG_FP = os.path.join("outputs", PROJECT, 'config', 'config.yaml')
 PYTHONPATH = os.path.abspath(os.getcwd())
 #print("python path: ", PYTHONPATH)
-CHROM_PARTS = ["1,10,11,20", "2,9,12,19", "3,8,13,18", "4,7,14,17,22", "5,6,15,16,21"]
+#CHROM_PARTS = ["1,10,11,20", "2,9,12,19", "3,8,13,18", "4,7,14,17,22", "5,6,15,16,21"]
 MODEL_TYPES = ['nas_final', 'nas_sample']
 
 configfile:
@@ -40,8 +40,9 @@ rule all:
 		#["outputs/{project}/asb/{model_type}/{binding_type}/allelic_imbalance_summary.tsv".format(project=PROJECT, binding_type=x, model_type=y) for x in config['allelic_imbalance'] for y in MODEL_TYPES ],
 		["outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance'] ],
 		# LDSC rule outputs
-		["outputs/{project}/ldsc/{model_type}/label_wise_l2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
-		["outputs/{project}/ldsc/{model_type}/label_wise_h2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
+		#["outputs/{project}/ldsc/{model_type}/label_wise_l2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
+		#["outputs/{project}/ldsc/{model_type}/label_wise_h2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
+		["outputs/{project}/ldsc/{model_type}/tau_star.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
 		# NAS evaluations
 		"outputs/{project}/nas_eval/search/PCA_1-2_embed.png".format(project=PROJECT),
 		"outputs/{project}/nas_eval/final/raw.tsv".format(project=PROJECT)
@@ -143,6 +144,7 @@ rule plot_final:
 		od = "outputs/{project}/nas_eval/final/"
 	
 	shell:
+		"export PYTHONPATH="+PYTHONPATH+"\n"
 		"python src/nas_final/final_plot.py --par-dir {params.par_dir} --od {params.od}"
 
 
@@ -270,7 +272,7 @@ rule ldsc_h2_step:
 	shell:
 		"export PYTHONPATH="+PYTHONPATH+"\n"
 		"if [ -f {params.cmd_list} ]; then rm {params.cmd_list}; rm -f {params.output_prefix}*; fi \n"
-		"for GWAS in `cat {params.sumstats_fp}`; do \n"
+		"for GWAS in `awk -F'\t' '{{print $1}}' {params.sumstats_fp}`; do \n"
 		"for ANNOT in `cat {params.annot_fp}`; do \n"
 		"echo python src/ldsc/ldsc_reg_run.py --sumstats $GWAS "
 		"--annot-list $ANNOT "
@@ -286,4 +288,19 @@ rule ldsc_h2_step:
 		"disBatch.py -p {params.output_prefix} {params.cmd_list} \n"
 		"echo `date` Done > {output}"
 
+
+rule ldsc_tau_star:
+	input:
+		"outputs/{project}/ldsc/{model_type}/label_wise_h2/done.txt"
+	
+	output:
+		"outputs/{project}/ldsc/{model_type}/tau_star.txt"
+	
+	params:
+		project_wd="outputs/{project}/"
+	
+	shell:
+		"export PYTHONPATH="+PYTHONPATH+"\n"
+		"python src/ldsc/ldsc_tau_star.py {params.project_wd} {wildcards.model_type} \n"
+		"echo `date` Done > {output}"
 

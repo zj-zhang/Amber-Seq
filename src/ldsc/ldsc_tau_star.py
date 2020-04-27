@@ -1,7 +1,11 @@
 """This script reads in necessary data and computes the standardized
-effect sizes (i.e. tau^*) for LDscore regressions
+effect sizes (i.e. tau*) for LDscore regressions
 ZZ
 2020.2.25
+
+Update:
+    2020.3.26: add ratio statistic
+    2020.4.27: modified for general use in snakemake
 """
 
 import os
@@ -11,7 +15,7 @@ import numpy as np
 import h5py
 import pickle
 from tqdm import tqdm
-from utils import run_from_ipython
+from src.utils import run_from_ipython
 
 
 def read_log(log_fp):
@@ -22,6 +26,7 @@ def read_log(log_fp):
     lambda_gc = None
     intercept = None
     ratio = None
+    ratio_se = None
     with open(log_fp, "r") as f:
         for line in f:
             ele = line.strip().split()
@@ -33,6 +38,7 @@ def read_log(log_fp):
                 mean_chi2 = float(ele[-1])
             elif line.startswith("Ratio"):
                 ratio = float(ele[-2])
+                ratio_se = float(ele[-1].strip("()"))
             elif line.startswith("Lambda GC"):
                 lambda_gc = float(ele[-1])
             elif line.startswith("Intercept"):
@@ -44,7 +50,8 @@ def read_log(log_fp):
             "mean_chi2": mean_chi2, 
             "lambda_gc": lambda_gc, 
             "intercept": intercept, 
-            "ratio": ratio
+            "ratio": ratio,
+            "ratio_se": ratio_se
             }
     return metrics
 
@@ -79,42 +86,36 @@ def get_annot_sd(pred_fp):
     return sds
 
 
-def get_tau_for_model(model_wd):
-    vep_dir = "vep_output"
-    #vep_dir = "vep_output_logfc" # this used to be "vep_output"
+def get_tau_for_model(project_wd, model_type):
     score_fn = "hg19.baselineLD_All.20180423_abs_diffs.h5"
-    #score_fn = "VEP_abs_logfc.npz"  # this used to be "hg19.baselineLD_All.20180423_abs_diffs.h5"
-    sds = get_annot_sd(os.path.join(model_wd, vep_dir, score_fn))
+    sds = get_annot_sd(os.path.join(project_wd, "vep", model_type, score_fn))
     
-    reg_dir = "label_wise_ldsc_reg_noBaseline_withLDblock" # this used to be "label_wise_ldsc_reg"  
-    gwas_list = os.listdir( os.path.join(model_wd, vep_dir, reg_dir) )
+    reg_dir = "label_wise_h2" # this used to be "label_wise_ldsc_reg"  
+    gwas_list = [x for x in os.listdir( os.path.join(project_wd, "ldsc", model_type, reg_dir) ) if os.path.isdir( os.path.join(project_wd, "ldsc", model_type, reg_dir, x))]
     for gwas in gwas_list:
         print(gwas)
-        annot_list = os.listdir( os.path.join(model_wd, vep_dir, reg_dir, gwas) )
-        #total_snps, h2 = read_log( os.path.join(model_wd, vep_dir, reg_dir,gwas,  annot_list[0], "ldsc_reg.log") )
+        annot_list = [x for x in os.listdir( os.path.join(project_wd, "ldsc", model_type, reg_dir, gwas) ) if os.path.isdir(os.path.join(project_wd, "ldsc", model_type, reg_dir, gwas, x))]
         try:
             for annot in tqdm(annot_list):
-                tau_c = read_reg_coef( os.path.join(model_wd, vep_dir, reg_dir, gwas, annot, "ldsc_reg.results") )
-                metrics = read_log( os.path.join(model_wd, vep_dir, reg_dir, gwas, annot, "ldsc_reg.log") )
+                tau_c = read_reg_coef( os.path.join(project_wd, "ldsc", model_type, reg_dir, gwas, annot, "ldsc_reg.results") )
+                metrics = read_log( os.path.join(project_wd, "ldsc", model_type, reg_dir, gwas, annot, "ldsc_reg.log") )
                 total_snps, h2 = metrics['total_snps'], metrics['h2']
                 index = int(annot.split('--')[0])
                 std = sds[index]
                 tau_star = tau_c * total_snps / h2 * std
 
-                output_fp =  os.path.join(model_wd, vep_dir, reg_dir, gwas, annot, "tau_star.txt")
+                output_fp =  os.path.join(project_wd, "ldsc", model_type, reg_dir, gwas, annot, "tau_star.txt")
                 with open(output_fp, "w" ) as fo:
-                    fo.write("\t".join(["tau_star", "tau_c", "total_snps", "h2", "std"]) + "\n")
-                    fo.write("\t".join([str(x) for x in [tau_star, tau_c, total_snps, h2, std]] ) + "\n" )
+                    fo.write("\t".join(["tau_star", "tau_c", "total_snps", "h2", "std", "ratio"]) + "\n")
+                    fo.write("\t".join([str(x) for x in [tau_star, tau_c, total_snps, h2, std, metrics['ratio']]] ) + "\n" )
         except Exception as e:
             print(e)
             break
 
 if __name__ == '__main__':
     if not run_from_ipython():
-        wd = sys.argv[1]
+        wd, model_type = sys.argv[1], sys.argv[2]
         if wd:
-            get_tau_for_model(wd)
-
-
+            get_tau_for_model(wd, model_type)
 
 

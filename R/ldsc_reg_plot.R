@@ -1,11 +1,13 @@
 # read in UKBB gwas LDscore regression results, and plot the some summaries
 # ZZJ, 2020.2.6
 # revised 2020.2.25: add main for analyzing "./batch_run_20200212-L12-Dilated10"
+# revised 2020.4.27: modified for genereal use in snakemake
 
 
 library(ggplot2)
 library(ggrepel)
 source("./R/darts_theme.R")
+
 
 get_phenotype_ldsr = function(par_dir, annot_df=NULL, p.adj.method='bonferroni'){
 	sub_dir = list.dirs(par_dir, recursive=F)
@@ -78,8 +80,14 @@ get_phenotype_ldsr = function(par_dir, annot_df=NULL, p.adj.method='bonferroni')
 }
 
 
-get_model_ldsr = function(par_dir, out_dir) {
-	annot_df = read.table("./ldsc_resources/labels_annot/total_label_idx.csv", header=T, sep="\t")
+get_model_ldsr = function(par_dir, out_dir, annot_fp=NULL) 
+# wrapper for reading in LDSC for a given model; NOT USED FOR NOW
+{
+	if(is.null(annot_fp)) {
+		annot_df  = NULL
+	} else {
+		annot_df = read.table(annot_fp, header=T, sep="\t")
+	}
 	pht_dirs = list.dirs(par_dir, recursive=F)
 	pht = c()
 	enrichment = c()
@@ -113,6 +121,8 @@ get_model_ldsr = function(par_dir, out_dir) {
 
 
 plot_pht_volcano = function(df, fig_title="", savefn=NULL)
+# volcano plot for each annotation's coefficient and adj. P-val on 
+# the given GWAS phenotype dataframe
 {
 	df$log10_model_coef_P = -log10(df$model_coef_P)
 	df$colour = 'grey'
@@ -146,43 +156,45 @@ plot_pht_volcano = function(df, fig_title="", savefn=NULL)
 }
 
 
-plot_model_wise_hits = function(res_df, annot_df, savefn=NULL) {
-	plot_df = NULL
-	for(i in 1:nrow(res_df)){
-		this = strsplit(res_df[i,]$coef_annot, ",")[[1]]
-		annot = annot_df[annot_df$label_name %in% this, ]
-		cat_freq = cbind( "GWAS"=res_df$pht[i], as.data.frame(table(annot$category)))
-		colnames(cat_freq) = c("GWAS", "Category", "Count")
-		plot_df = rbind.data.frame(plot_df, cat_freq)
-	}
-
-	p = ggplot(aes(x=GWAS, y=Count, fill=Category), data=plot_df) + 
-		geom_bar(stat="identity", width=0.9, colour="black") + 
-		scale_fill_brewer(palette = 'Set1') + 
-		Darts_theme +
-		theme(plot.title=element_text(hjust=0.5), panel.background = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=1),
-			axis.text.x = element_text(size=10, angle=45, hjust=1, vjust=1),axis.text.y = element_text(size=10))
-	if(! is.null(savefn))
-	{
-		ggsave(p, file=savefn)
-	}
-	return(p)
-}
-
-
 compare_baseline = function(par_dir1, par_dir2, pht)
 {
 	read_data = function(par_dir) {
-		baselines = c("V2.2"="label_wise_ldsc_reg", "V1.1"="label_wise_ldsc_reg_BaselineV1.1", "OnlyLDsize"="label_wise_ldsc_reg_noBaseline_withLDblock")
+		baselines = c(
+			      "V2.2"="label_wise_h2"#, 
+			      #"V1.1"="label_wise_ldsc_reg_BaselineV1.1", 
+			      #"OnlyLDsize"="label_wise_ldsc_reg_noBaseline_withLDblock"
+		)
 		res = NULL
 		for(i in 1:length(baselines))
 		{
 			pht_dir = file.path(par_dir, baselines[i], pht)
+			if(! dir.exists(pht_dir)) next
 			pht_df = get_phenotype_ldsr(pht_dir, p.adj.method="fdr" )
 			pht_df = pht_df[, c("label_name", "model_enrichment_P", "model_enrichment_val", "model_coef_P", "model_coef_val", "model_enrichment_std", "model_coef_std")]
 			pht_df$version = names(baselines)[i]
 			res = rbind.data.frame(res, pht_df)
-		}
+ read_data = function(par_dir) {
+                baselines = c(
+                              "V2.2"="label_wise_ldsc_reg",
+                              "V1.1"="label_wise_ldsc_reg_BaselineV1.1",
+                              "OnlyLDsize"="label_wise_ldsc_reg_noBaseline_withLDblock"
+                )
+                res = NULL
+                for(i in 1:length(baselines))
+                {
+                        pht_dir = file.path(par_dir, baselines[i], pht)
+                        if(! dir.exists(pht_dir)) next
+                        pht_df = get_phenotype_ldsr(pht_dir, p.adj.method="fdr" )
+                        pht_df = pht_df[, c("label_name", "model_enrichment_P", "model_enrichment_val", "model_coef_P", "model_coef_val", "model_enrichment_std", "model_coef_std")]
+                        pht_df$version = names(baselines)[i]
+                        res = rbind.data.frame(res, pht_df)
+                }
+
+                return(res)
+        }
+
+        res1 = read_data(par_dir1)
+        res2 = read_data(par_dir2)		}
 
 		return(res)
 	}
@@ -198,20 +210,44 @@ compare_baseline = function(par_dir1, par_dir2, pht)
 	return(delta)
 }
 
+rename_fn = function(x=NULL)
+# rename function for plotting
+{
+	dict = c("body_BMIz"="BMI", 
+		"body_HEIGHTz"="Height", 
+		"body_WHRadjBMIz"="Waist-Hip ratio",
+		"disease_AID_ALL"="AID",
+		"disease_ALLERGY_ECZEMA_DIAGNOSED"="Allergy Eczema",
+		"disease_ASTHMA_DIAGNOSED"="Asthma",
+		"disease_CARDIOVASCULAR"="Cardiovascular",
+		"disease_DERMATOLOGY"="Dermatology",
+		"disease_HI_CHOL_SELF_REP"="High cholesterol",
+		"disease_HYPOTHYROIDISM_SELF_REP"="Hypothyroidism",
+		"disease_RESPIRATORY_ENT"="Respiratory & ENT",
+		"disease_T2D"="T2D"
+	)
+	if(is.null(x)) {
+		return(dict)
+	} else {
+		return(dict[as.character(x)])
+	}
+}
 
-main = function()
-#compare_multiple_phenotypes = function()
+
+main = function(par_dir1, par_dir2, out_dir)
 # the new main entry; 2020.3.11
+# modifief for snakemake use; 2020.4.27
 {
 	res = NULL
-	par_dir1 = "./batch_run_20200212-L12-Dilated10/tmp_final_12_5/vep_output/"
-	par_dir2 = "./batch_run_20200212-L12-Dilated10/tmp_final_12_1.Random/vep_output/"
+	#par_dir1 = "./batch_run_20200212-L12-Dilated10/tmp_final_12_5/vep_output/"
+	#par_dir2 = "./batch_run_20200212-L12-Dilated10/tmp_final_12_1.Random/vep_output/"
 	
 	phenotypes = c("body_BMIz", "body_HEIGHTz", "body_WHRadjBMIz", "disease_AID_ALL", "disease_ALLERGY_ECZEMA_DIAGNOSED", "disease_ASTHMA_DIAGNOSED", "disease_CARDIOVASCULAR", "disease_DERMATOLOGY", "disease_HI_CHOL_SELF_REP", "disease_HYPOTHYROIDISM_SELF_REP", "disease_RESPIRATORY_ENT", "disease_T2D")
 
-	if(file.exists("./batch_run_figures/4_ldsc/delta_summary.tsv"))
+	summary_fp = file.path(out_dir, "delta_summary.tsv")
+	if(file.exists(summary_fp))
 	{
-		res = read.table("./batch_run_figures/4_ldsc/delta_summary.tsv", header=T, sep="\t")
+		res = read.table(summary_fp, header=T, sep="\t")
 	} else {
 		for(i in 1:length(phenotypes))
 		{
@@ -221,34 +257,9 @@ main = function()
 			res = rbind.data.frame(res, delta)
 		}
 
-		write.table(res, file="./batch_run_figures/4_ldsc/delta_summary.tsv", quote=F, sep="\t", row.names=F)
+		write.table(res, file=summary_fp, quote=F, sep="\t", row.names=F)
 	}
 
-
-	# rename function for plotting
-	#rename_fn =function(x){ a=strsplit(as.character(x), "_",)[[1]]; a=a[2:length(a)]; a=paste(a, collapse="_"); return(a)}
-
-	rename_fn = function(x=NULL)
-	{
-		dict = c("body_BMIz"="BMI", 
-			"body_HEIGHTz"="Height", 
-			"body_WHRadjBMIz"="Waist-Hip ratio",
-			"disease_AID_ALL"="AID",
-			"disease_ALLERGY_ECZEMA_DIAGNOSED"="Allergy Eczema",
-			"disease_ASTHMA_DIAGNOSED"="Asthma",
-			"disease_CARDIOVASCULAR"="Cardiovascular",
-			"disease_DERMATOLOGY"="Dermatology",
-			"disease_HI_CHOL_SELF_REP"="High cholesterol",
-			"disease_HYPOTHYROIDISM_SELF_REP"="Hypothyroidism",
-			"disease_RESPIRATORY_ENT"="Respiratory & ENT",
-			"disease_T2D"="T2D"
-		)
-		if(is.null(x)) {
-			return(dict)
-		} else {
-			return(dict[as.character(x)])
-		}
-	}
 
 	# PLOT enrichment
 	res1 = res[which(
@@ -264,26 +275,16 @@ main = function()
 	res1$category[which(res1$pht %in% c("body_BMIz", "body_HEIGHTz", "body_WHRadjBMIz"))] = "Trait"	
 
 	res1$pht2 = rename_fn(res1$pht)
-	summary_data = read.table("./batch_run_figures/4_ldsc/delta_enrichment_VS_baseline.tsv", header=T, sep="\t")
 	res1$pht2 = factor(res1$pht2, levels = rename_fn() )
 	p1 = ggplot(res1, aes(x=pht2, y=model_enrichment_val, fill=category)) + 
 		geom_boxplot(outlier.shape=NA, position=position_dodge(0.8)) +
 		geom_hline(yintercept=0, linetype="dashed", colour="grey") + 
-		#geom_jitter() + 
 		ylim(-1, 1.5) + 
 		Darts_theme +
 		theme( axis.text.x = element_text(size=10, angle=45, hjust=1, vjust=1)) +
 	        ylab("logfc(Enrichment)") + xlab("") + 
 		theme(legend.position=c(0,1), legend.justification=c(0,1), legend.title=element_blank())
 	
-	# DO NOT RUN: this will mix across categories, and because negative ones 
-	# have more in numbers, the distributions look bad
-	# update 2020.3.19: version2, plot histogram
-	#p1.2 = ggplot(res1, aes(x=model_enrichment_val, fill=category)) +
-	#	      geom_histogram(bins=100)
-	#ggsave(p1.2, file="./batch_run_figures/4_ldsc/normal_disease.delta.pdf", width=4.5, height=4.5)
-
-
 	# PLOT coef
 	res2 = res[which(
 			 (res$model_coef_val.1>0 & res$model_coef_P.1<0.05) | 
@@ -292,7 +293,6 @@ main = function()
 	res2 = res2[ which(
 			   res2$version %in% c("V2.2")
 		   ),]
-
 
 	res2$category = "Disease"
 	res2$category[which(res2$pht %in% c("body_BMIz", "body_HEIGHTz", "body_WHRadjBMIz"))] = "Trait"	
@@ -309,12 +309,23 @@ main = function()
 		theme(legend.position=c(0,1), legend.justification=c(0,1), legend.title=element_blank())
 
 	# SAVE
-	ggsave(p1, file="./batch_run_figures/4_ldsc/delta_enrichment.pdf", width=4.5, height=7)
-	ggsave(p2, file="./batch_run_figures/4_ldsc/delta_coef.pdf", width=4.5, height=7)
-	write.table(res1, "./batch_run_figures/4_ldsc/delta_enrichment.tsv", sep="\t", quote=F, row.names=F)
-	write.table(res2, "./batch_run_figures/4_ldsc/delta_coef.tsv", sep="\t", quote=F, row.names=F)
+	ggsave(p1, file=file.path(out_dir,"delta_enrichment.pdf"), width=4.5, height=7)
+	ggsave(p2, file=file.path(out_dir, "delta_coef.pdf"), width=4.5, height=7)
+	write.table(res1, file.path(out_dir,"delta_enrichment.tsv"), sep="\t", quote=F, row.names=F)
+	write.table(res2, file.path(out_dir,"delta_coef.tsv"), sep="\t", quote=F, row.names=F)
 
 
 }
 
 
+parser = function(args)
+{
+	par_dir1 = args[1]
+	par_dir2 = args[2]
+	out_dir = args[3]
+	main(par_dir1, par_dir2, out_dir)
+}
+
+
+args = commandArgv(TRUE)
+parser(args)

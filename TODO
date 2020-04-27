@@ -1,0 +1,4 @@
+# 2020.4.27
+- add plotting and evaluation rules after LDSC h2 step
+- for LDSC l2/h2, add another python script to check whether all files are correctly produced; only 
+make the `done.txt` if all files pass 
