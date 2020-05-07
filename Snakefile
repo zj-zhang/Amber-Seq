@@ -33,16 +33,13 @@ configfile:
 rule all:
 	input:
 		# NAS outputs 
-		#"outputs/{project}/nas_search/train_history.png".format(project=PROJECT),
-		#"outputs/{project}/nas_final/metrics.log".format(project=PROJECT),
-		#"outputs/{project}/nas_sample/metrics.log".format(project=PROJECT),
+		"outputs/{project}/nas_search/train_history.png".format(project=PROJECT),
+		"outputs/{project}/nas_final/metrics.log".format(project=PROJECT),
+		"outputs/{project}/nas_sample/metrics.log".format(project=PROJECT),
 		# Allelic imbalance outputs
-		#["outputs/{project}/asb/{model_type}/{binding_type}/allelic_imbalance_summary.tsv".format(project=PROJECT, binding_type=x, model_type=y) for x in config['allelic_imbalance'] for y in MODEL_TYPES ],
 		["outputs/{project}/asb/{binding_type}/{binding_type}.overall_acc.pdf".format(project=PROJECT, binding_type=x) for x in config['allelic_imbalance'] ],
 		# LDSC rule outputs
-		#["outputs/{project}/ldsc/{model_type}/label_wise_l2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
-		#["outputs/{project}/ldsc/{model_type}/label_wise_h2/done.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
-		["outputs/{project}/ldsc/{model_type}/tau_star.txt".format(project=PROJECT, model_type=y) for y in MODEL_TYPES],
+		"outputs/{project}/ldsc/evaluation/delta_summary.tsv".format(project=PROJECT),
 		# NAS evaluations
 		"outputs/{project}/nas_eval/search/PCA_1-2_embed.png".format(project=PROJECT),
 		"outputs/{project}/nas_eval/final/raw.tsv".format(project=PROJECT)
@@ -304,3 +301,19 @@ rule ldsc_tau_star:
 		"python src/ldsc/ldsc_tau_star.py {params.project_wd} {wildcards.model_type} \n"
 		"echo `date` Done > {output}"
 
+
+rule ldsc_plot:
+	input:
+		final_model = "outputs/{project}/ldsc/nas_final/tau_star.txt",
+		sample_model = "outputs/{project}/ldsc/nas_sample/tau_star.txt"
+	
+	output:
+		"outputs/{project}/ldsc/evaluation/delta_summary.tsv"
+	
+	params:
+		par_dir1 = "outputs/{project}/ldsc/nas_final",
+		par_dir2 = "outputs/{project}/ldsc/nas_sample",
+		outdir = "outputs/{project}/ldsc/evaluation/"
+	
+	shell:
+		"Rscript R/ldsc_reg_plot.R {params.par_dir1} {params.par_dir2} {params.outdir}"

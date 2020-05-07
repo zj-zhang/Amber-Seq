@@ -327,5 +327,5 @@ parser = function(args)
 }
 
 
-args = commandArgv(TRUE)
+args = commandArgs(TRUE)
 parser(args)
