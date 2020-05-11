@@ -1,5 +1,6 @@
 #!/bin/bash
 PROJECT="$1" snakemake --cluster-config clusterconfig_slurm.yaml \
+--nolock \
 --cluster ./job_scheduler_slurm.py \
 --latency-wait 60 --jobs 10 \
 --rerun-incomplete \

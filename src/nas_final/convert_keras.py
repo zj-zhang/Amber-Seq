@@ -280,11 +280,14 @@ def main(sd, wd, final_config, gpus=1, pooling='Flatten', width_scale_factor=2, 
     dropout_rate = final_config.pop("dropout_rate", 0.1)
 
     print("pooling mode is %s"%pooling)
-    model = convert(arc_seq, model_space, width_scale_factor, dropout_rate,
-                    model_plot_fn=os.path.join(wd,"model.png"),
-                    pooling_mode=pooling,
-                    add_conv1_under_pool=add_conv1_under_pool
-                    )
+    model = convert(arc_seq=arc_seq, 
+                model_space=model_space, 
+                width_scale_factor=width_scale_factor, 
+                dropout_rate=dropout_rate,
+                model_plot_fn=os.path.join(wd,"model.png"),
+                pooling_mode=pooling,
+                add_conv1_under_pool=add_conv1_under_pool
+                )
 
     with open(os.path.join(wd, 'keras_model_summary.txt'), 'w') as f:
         with redirect_stdout(f):

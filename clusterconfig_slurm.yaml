@@ -9,7 +9,7 @@ __default__:
 nas_search:
         queue: gpu
         gres: gpu:v100-32gb:1
-        time: 1-0
+        time: 3-0
         num_nodes: 1
         ntasks: 1
         ntasks_per_node: 1
@@ -18,7 +18,7 @@ nas_search:
 nas_final:
         queue: gpu
         gres: gpu:v100-32gb:1
-        time: 1-0
+        time: 3-0
         num_nodes: 1
         ntasks: 1
         ntasks_per_node: 1
@@ -27,7 +27,7 @@ nas_final:
 nas_sample:
         queue: gpu
         gres: gpu:v100-32gb:1
-        time: 1-0
+        time: 3-0
         num_nodes: 1
         ntasks: 1
         ntasks_per_node: 1

@@ -6,9 +6,10 @@ Author:
 	Zijun Zhang <zj.z@ucla.edu>
 
 Date: 
-	3.22.2020
+	March 22, 2020
 
 Histroy:
+	May 10, 2020: add `nas_training_stats.json` as output to nas-search
 
 """
 
@@ -50,7 +51,10 @@ rule nas_search:
 	input:
 		"outputs/{project}/config/config.yaml"
 	output:
-		"outputs/{project}/nas_search/train_history.png"
+		"outputs/{project}/nas_search/train_history.png",
+		"outputs/{project}/nas_search/nas_training_stats.json",
+		"outputs/{project}/nas_search/weight_data.json",
+		"outputs/{project}/nas_search/train_history.csv"
 
 	params:
 		controller_config_fp = config['nas_search']['controller_config_fp'],
