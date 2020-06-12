@@ -217,6 +217,7 @@ rename_fn = function(x=NULL)
 		"body_HEIGHTz"="Height", 
 		"body_WHRadjBMIz"="Waist-Hip ratio",
 		"disease_AID_ALL"="AID",
+		"disease_AID_SURE"="AID_SURE",
 		"disease_ALLERGY_ECZEMA_DIAGNOSED"="Allergy Eczema",
 		"disease_ASTHMA_DIAGNOSED"="Asthma",
 		"disease_CARDIOVASCULAR"="Cardiovascular",
@@ -242,7 +243,7 @@ main = function(par_dir1, par_dir2, out_dir)
 	#par_dir1 = "./batch_run_20200212-L12-Dilated10/tmp_final_12_5/vep_output/"
 	#par_dir2 = "./batch_run_20200212-L12-Dilated10/tmp_final_12_1.Random/vep_output/"
 	
-	phenotypes = c("body_BMIz", "body_HEIGHTz", "body_WHRadjBMIz", "disease_AID_ALL", "disease_ALLERGY_ECZEMA_DIAGNOSED", "disease_ASTHMA_DIAGNOSED", "disease_CARDIOVASCULAR", "disease_DERMATOLOGY", "disease_HI_CHOL_SELF_REP", "disease_HYPOTHYROIDISM_SELF_REP", "disease_RESPIRATORY_ENT", "disease_T2D")
+	phenotypes = c("body_BMIz", "body_HEIGHTz", "body_WHRadjBMIz", "disease_AID_ALL", "disease_AID_SURE", "disease_ALLERGY_ECZEMA_DIAGNOSED", "disease_ASTHMA_DIAGNOSED", "disease_CARDIOVASCULAR", "disease_DERMATOLOGY", "disease_HI_CHOL_SELF_REP", "disease_HYPOTHYROIDISM_SELF_REP", "disease_RESPIRATORY_ENT", "disease_T2D")
 
 	summary_fp = file.path(out_dir, "delta_summary.tsv")
 	if(file.exists(summary_fp))

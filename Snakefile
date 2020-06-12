@@ -205,7 +205,8 @@ rule plot_asb:
 		output_prefix = "outputs/{project}/asb/{binding_type}/{binding_type}"
 	
 	shell:
-		"Rscript R/allelic_plot.R {input.inp_search} {input.inp_samp} {params.output_prefix}"
+		"Rscript R/allelic_plot.R {input.inp_search} {input.inp_samp} {params.output_prefix} \n"
+		"Rscript R/allelic_plot2.R {input.inp_search} {input.inp_samp} {params.output_prefix} \n"
 
 
 rule ldsc_l2_step:

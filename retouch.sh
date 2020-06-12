@@ -10,5 +10,9 @@ find outputs/$project/nas_final/ -exec touch {} \;
 find outputs/$project/nas_sample/ -exec touch {} \;
 find outputs/$project/vep/ -exec touch {} \;
 find outputs/$project/asb/* -exec touch {} \;
-touch outputs/$project/ldsc/label_wise_l2/done.txt
-touch outputs/$project/ldsc/label_wise_h2/done.txt
+touch outputs/$project/ldsc/*/label_wise_l2/done.txt
+touch outputs/$project/ldsc/*/label_wise_h2/done.txt
+touch outputs/$project/ldsc/*/tau_star.txt
+touch outputs/$project/nas_eval/final/raw.tsv
+touch outputs/$project/nas_eval/search/*
+touch outputs/$project/ldsc/evaluation/delta_summary.tsv

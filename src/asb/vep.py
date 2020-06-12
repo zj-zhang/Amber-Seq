@@ -2,11 +2,33 @@ from BioNAS.Interpret.sequence_model import AnalyzeSequencesNAS
 from selene_sdk.utils import load_features_list
 from selene_sdk.sequences import Genome
 import argparse
+from keras.models import load_model
+
+
+class NonStrandModel(object):
+    def __init__(self, model):
+        self.model = model
+
+    def predict_swapbase(self, x):
+        x_ = x[:, ::-1, ::-1]
+        y_ = self.model.predict(x_)
+        return y_
+
+    def predict(self, x):
+        y_f = self.model.predict(x)
+        y_r = self.predict_swapbase(x)
+
+        return (y_f + y_r)/2.
+
+
 
 def analysis(model_path, output_dir, genome_fp, vcf_fp, label_annot_fp):
     label_annot =  load_features_list(label_annot_fp)
+    #base_model = load_model(model_path)
+    #nsm = NonStrandModel(model=base_model)
     ans = AnalyzeSequencesNAS(
             trained_model_path=model_path,
+            #trained_model_path=nsm,
             sequence_length=1000,
             features=label_annot,
             batch_size=1000,

@@ -9,7 +9,7 @@ __default__:
 nas_search:
         queue: gpu
         gres: gpu:v100-32gb:1
-        time: 3-0
+        time: 3-2
         num_nodes: 1
         ntasks: 1
         ntasks_per_node: 1
@@ -18,7 +18,7 @@ nas_search:
 nas_final:
         queue: gpu
         gres: gpu:v100-32gb:1
-        time: 3-0
+        time: 3-2
         num_nodes: 1
         ntasks: 1
         ntasks_per_node: 1
@@ -56,15 +56,23 @@ ldsc_h2_step:
         num_nodes: 5
         ntasks: 200
         ntasks_per_node: 40
-        mem: 500GB
+        mem: 400GB
 
-allelic_imbalance_analysis: 
-        queue : ccb
+ldsc_tau_star: 
+        queue : genx
         time: 1-0
         num_nodes: 1
         ntasks: 1
         ntasks_per_node: 1
-        mem: 200GB
+        mem: 150GB
+
+allelic_imbalance_analysis: 
+        queue : genx
+        time: 1-0
+        num_nodes: 1
+        ntasks: 1
+        ntasks_per_node: 1
+        mem: 150GB
 
 
 
