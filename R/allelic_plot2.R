@@ -48,9 +48,13 @@ auc_sum_func = function(obs, pred, type="pos"){
 	if(type=="pos"){
 		scores0 = - pred[which(obs==0 & !is.na(pred) )]
 		scores1 = - pred[which(obs==1 & !is.na(pred) )]
-	} else {
+	} else if(type=="neg") {
 		scores0 = pred[which(obs==0 & !is.na(pred) )]
 		scores1 = pred[which(obs==-1 & !is.na(pred) )]
+	}
+	else {
+		scores0 = abs(pred[which(obs==0 & !is.na(pred) )])
+		scores1 = abs(pred[which( abs(obs)==1 & !is.na(pred) )])	
 	}
 	if(length(scores1)<20 || length(scores0)<20) {
 		return(NA)
@@ -118,7 +122,8 @@ main = function(fp1, fp2, out)
                 Darts_theme +
                 theme(axis.text.y = element_text(angle=0, hjust=1),  legend.title=element_blank(), legend.position="none") +
                 geom_hline(yintercept=seq(0.4, 0.9, 0.1), linetype="dashed", colour="grey") +
-		scale_color_manual(values=c("BioNAS"="red", "Sample.Architecture"="blue", "DeepSEA"="purple", "deltaSVM"="orange", "DeepBind"="darkgreen", "Jaspar"="darkgrey", "MEME"="brown")) + 
+		#scale_color_manual(values=c("BioNAS"="red", "Sample.Architecture"="blue", "DeepSEA"="purple", "deltaSVM"="orange", "DeepBind"="darkgreen", "Jaspar"="darkgrey", "MEME"="brown")) + 
+		scale_color_manual(values=c("BioNAS"="red", "Sample.Architecture"="steelblue3", "DeepSEA"="salmon", "deltaSVM"="plum", "DeepBind"="limegreen", "Jaspar"="darkgrey", "MEME"="burlywood")) + 
 		ggtitle("Loss-of-function") +
 		theme(axis.title.x = element_blank(),
 			axis.title.y = element_blank(),
@@ -142,7 +147,8 @@ main = function(fp1, fp2, out)
                 Darts_theme +
                 theme(axis.text.y = element_text(angle=0, hjust=1),  legend.title=element_blank(), legend.position="none") +
                 geom_hline(yintercept=seq(0.4, 0.9, 0.1), linetype="dashed", colour="grey") +
-		scale_color_manual(values=c("BioNAS"="red", "Sample.Architecture"="blue", "DeepSEA"="purple", "deltaSVM"="orange", "DeepBind"="darkgreen", "Jaspar"="darkgrey", "MEME"="brown")) + 
+		#scale_color_manual(values=c("BioNAS"="red", "Sample.Architecture"="blue", "DeepSEA"="purple", "deltaSVM"="orange", "DeepBind"="darkgreen", "Jaspar"="darkgrey", "MEME"="brown")) + 
+		scale_color_manual(values=c("BioNAS"="red", "Sample.Architecture"="steelblue3", "DeepSEA"="salmon", "deltaSVM"="plum", "DeepBind"="limegreen", "Jaspar"="darkgrey", "MEME"="burlywood")) + 
 		ggtitle("Gain-of-function") + 
 		theme(axis.title.x = element_blank(),
 			axis.title.y = element_blank(),

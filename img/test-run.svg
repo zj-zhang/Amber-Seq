@@ -1,249 +1,282 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 903 404" style="enable-background:new 0 0 903 404;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:none;stroke:#56B1D8;stroke-width:2;}
-	.st1{font-family:'ArialMT';}
-	.st2{font-size:10px;}
-	.st3{fill:none;stroke:#D85656;stroke-width:2;}
-	.st4{fill:none;stroke:#C0C0C0;stroke-width:2;}
-	.st5{fill:#C0C0C0;stroke:#C0C0C0;stroke-width:2;}
-	.st6{fill:none;stroke:#D8B456;stroke-width:2;}
-	.st7{fill:none;stroke:#CED856;stroke-width:2;}
-	.st8{fill:none;stroke:#56D89A;stroke-width:2;}
-	.st9{fill:none;stroke:#9FD856;stroke-width:2;}
-	.st10{fill:none;stroke:#D88556;stroke-width:2;}
-	.st11{fill:none;stroke:#70D856;stroke-width:2;}
-	.st12{fill:none;stroke:#56D86B;stroke-width:2;}
-	.st13{fill:none;stroke:#5682D8;stroke-width:2;}
-	.st14{fill:none;stroke:#56D8C9;stroke-width:2;}
-</style>
-<g id="graph0" transform="scale(1 1) rotate(0) translate(4 400)">
-	<title>snakemake_dag</title>
-	<g id="node1">
-		<title>0</title>
-		<path class="st0" d="M337.6-36h-30c-6,0-12,6-12,12v12c0,6,6,12,12,12h30c6,0,12-6,12-12v-12C349.6-30,343.6-36,337.6-36"/>
-		<text transform="matrix(1 0 0 1 317.5676 -15.5)" class="st1 st2">all</text>
-	</g>
-	<g id="node2">
-		<title>1</title>
-		<path class="st3" d="M390.6-108h-34c-6,0-12,6-12,12v12c0,6,6,12,12,12h34c6,0,12-6,12-12v-12C402.6-102,396.6-108,390.6-108"/>
-		<text transform="matrix(1 0 0 1 354.6662 -87.5)" class="st1 st2">plot_asb</text>
-	</g>
-	<g id="edge1">
-		<title>1-&gt;0</title>
-		<path class="st4" d="M360.7-71.8c-5.8,8.2-12.8,18.1-19.2,27.1"/>
-		<polygon class="st5" points="344.2,-42.6 335.6,-36.4 338.5,-46.6 		"/>
-	</g>
-	<g id="node3">
-		<title>2</title>
-		<path class="st3" d="M231.6-108h-34c-6,0-12,6-12,12v12c0,6,6,12,12,12h34c6,0,12-6,12-12v-12C243.6-102,237.6-108,231.6-108"/>
-		<text transform="matrix(1 0 0 1 195.6662 -87.5)" class="st1 st2">plot_asb</text>
-	</g>
-	<g id="edge2">
-		<title>2-&gt;0</title>
-		<path class="st4" d="M241.8-71.8c13.7,9.1,30.4,20.3,45.1,30.1"/>
-		<polygon class="st5" points="288.9,-44.6 295.3,-36.2 285.1,-38.8 		"/>
-	</g>
-	<g id="node4">
-		<title>3</title>
-		<path class="st6" d="M111.6-108h-56c-6,0-12,6-12,12v12c0,6,6,12,12,12h56c6,0,12-6,12-12v-12C123.6-102,117.6-108,111.6-108"/>
-		<text transform="matrix(1 0 0 1 54.1047 -87.5)" class="st1 st2">ldsc_h2_step</text>
-	</g>
-	<g id="edge3">
-		<title>3-&gt;0</title>
-		<path class="st4" d="M123.6-77.9c45.2,13.6,118.3,35.6,162.2,48.9"/>
-		<polygon class="st5" points="286.9,-32.4 295.5,-26.2 284.9,-25.7 		"/>
-	</g>
-	<g id="node5">
-		<title>4</title>
-		<path class="st6" d="M676.6-108h-56c-6,0-12,6-12,12v12c0,6,6,12,12,12h56c6,0,12-6,12-12v-12C688.6-102,682.6-108,676.6-108"/>
-		<text transform="matrix(1 0 0 1 619.1047 -87.5)" class="st1 st2">ldsc_h2_step</text>
-	</g>
-	<g id="edge4">
-		<title>4-&gt;0</title>
-		<path class="st4" d="M608.3-81.1c-63.6,14-186.4,41.2-248.2,54.8"/>
-		<polygon class="st5" points="360.5,-22.8 350,-24.1 359,-29.6 		"/>
-	</g>
-	<g id="node6">
-		<title>5</title>
-		<path class="st7" d="M833.1-324h-49c-6,0-12,6-12,12v12c0,6,6,12,12,12h49c6,0,12-6,12-12v-12C845.1-318,839.1-324,833.1-324"/>
-		<text transform="matrix(1 0 0 1 782.7204 -303.5)" class="st1 st2">plot_search</text>
-	</g>
-	<g id="edge5">
-		<title>5-&gt;0</title>
-		<path class="st4" d="M828.8-288c32.3,31,88.8,95.8,55.8,144C824.3-56.3,475.7-27.3,359.9-20.1"/>
-		<polygon class="st5" points="360,-16.6 349.8,-19.4 359.6,-23.5 		"/>
-	</g>
-	<g id="node7">
-		<title>6</title>
-		<path class="st8" d="M489.6-252h-38c-6,0-12,6-12,12v12c0,6,6,12,12,12h38c6,0,12-6,12-12v-12C501.6-246,495.6-252,489.6-252"/>
-		<text transform="matrix(1 0 0 1 450.5554 -231.5)" class="st1 st2">plot_final</text>
-	</g>
-	<g id="edge6">
-		<title>6-&gt;0</title>
-		<path class="st4" d="M439.4-229.2c-46.6,7.9-131,25.2-148.8,49.2c-29.7,39.9-4.4,100.3,15,134.9"/>
-		<polygon class="st5" points="308.8,-46.4 310.8,-36 302.8,-42.9 		"/>
-	</g>
-	<g id="node8">
-		<title>7</title>
-		<path class="st9" d="M435.6-180h-124c-6,0-12,6-12,12v12c0,6,6,12,12,12h124c6,0,12-6,12-12v-12C447.6-174,441.6-180,435.6-180"/>
-		<text transform="matrix(1 0 0 1 314.6491 -165)" class="st1 st2">allelic_imbalance_analysis</text>
-		<text transform="matrix(1 0 0 1 339.6564 -154)" class="st1 st2">binding_type: tf</text>
-	</g>
-	<g id="edge7">
-		<title>7-&gt;1</title>
-		<path class="st4" d="M373.6-143.8c0,7.7,0,16.9,0,25.4"/>
-		<polygon class="st5" points="377.1,-118.4 373.6,-108.4 370.1,-118.4 		"/>
-	</g>
-	<g id="node9">
-		<title>8</title>
-		<path class="st9" d="M767.6-180h-124c-6,0-12,6-12,12v12c0,6,6,12,12,12h124c6,0,12-6,12-12v-12C779.6-174,773.6-180,767.6-180"/>
-		<text transform="matrix(1 0 0 1 646.6491 -165)" class="st1 st2">allelic_imbalance_analysis</text>
-		<text transform="matrix(1 0 0 1 671.6564 -154)" class="st1 st2">binding_type: tf</text>
-	</g>
-	<g id="edge8">
-		<title>8-&gt;1</title>
-		<path class="st4" d="M631.5-145.9c-67.7,14.7-165.1,35.8-218.8,47.4"/>
-		<polygon class="st5" points="413.4,-95.1 402.9,-96.4 411.9,-101.9 		"/>
-	</g>
-	<g id="node10">
-		<title>9</title>
-		<path class="st9" d="M231.6-180h-124c-6,0-12,6-12,12v12c0,6,6,12,12,12h124c6,0,12-6,12-12v-12C243.6-174,237.6-180,231.6-180"/>
-		<text transform="matrix(1 0 0 1 110.6491 -165)" class="st1 st2">allelic_imbalance_analysis</text>
-		<text transform="matrix(1 0 0 1 131.4841 -154)" class="st1 st2">binding_type: dgf</text>
-	</g>
-	<g id="edge9">
-		<title>9-&gt;2</title>
-		<path class="st4" d="M180.9-143.8c5.1,8.1,11.2,17.9,16.8,26.8"/>
-		<polygon class="st5" points="200.7,-118.7 203.1,-108.4 194.8,-115 		"/>
-	</g>
-	<g id="node11">
-		<title>10</title>
-		<path class="st9" d="M601.6-180h-124c-6,0-12,6-12,12v12c0,6,6,12,12,12h124c6,0,12-6,12-12v-12C613.6-174,607.6-180,601.6-180"/>
-		<text transform="matrix(1 0 0 1 480.6491 -165)" class="st1 st2">allelic_imbalance_analysis</text>
-		<text transform="matrix(1 0 0 1 501.4841 -154)" class="st1 st2">binding_type: dgf</text>
-	</g>
-	<g id="edge10">
-		<title>10-&gt;2</title>
-		<path class="st4" d="M465.4-145.6c-65.9,14.6-159.5,35.3-211.8,46.9"/>
-		<polygon class="st5" points="254.3,-95.2 243.7,-96.5 252.8,-102 		"/>
-	</g>
-	<g id="node12">
-		<title>11</title>
-		<path class="st10" d="M65.1-180h-53c-6,0-12,6-12,12v12c0,6,6,12,12,12h53c6,0,12-6,12-12v-12C77.1-174,71.1-180,65.1-180"/>
-		<text transform="matrix(1 0 0 1 10.7746 -159.5)" class="st1 st2">ldsc_l2_step</text>
-	</g>
-	<g id="edge11">
-		<title>11-&gt;3</title>
-		<path class="st4" d="M49.9-143.8C55-135.7,61.1-126,66.7-117"/>
-		<polygon class="st5" points="69.7,-118.7 72.1,-108.4 63.8,-115 		"/>
-	</g>
-	<g id="node13">
-		<title>12</title>
-		<path class="st10" d="M863.1-180h-53c-6,0-12,6-12,12v12c0,6,6,12,12,12h53c6,0,12-6,12-12v-12C875.1-174,869.1-180,863.1-180"/>
-		<text transform="matrix(1 0 0 1 808.7747 -159.5)" class="st1 st2">ldsc_l2_step</text>
-	</g>
-	<g id="edge12">
-		<title>12-&gt;4</title>
-		<path class="st4" d="M797.6-147.1c-28.9,11-68.4,26.2-99.5,38.1"/>
-		<polygon class="st5" points="699.4,-105.7 688.8,-105.4 696.9,-112.2 		"/>
-	</g>
-	<g id="node14">
-		<title>13</title>
-		<path class="st11" d="M608.1-396h-71c-6,0-12,6-12,12v12c0,6,6,12,12,12h71c6,0,12-6,12-12v-12C620.1-390,614.1-396,608.1-396"/>
-		<text transform="matrix(1 0 0 1 546.7204 -381)" class="st1 st2">nas_search</text>
-		<text transform="matrix(1 0 0 1 537.8337 -370)" class="st1 st2">project: test-run</text>
-	</g>
-	<g id="edge13">
-		<title>13-&gt;5</title>
-		<path class="st4" d="M620.3-363.4c41.3,12.6,100.7,30.7,141.6,43.2"/>
-		<polygon class="st5" points="763.2,-323.5 771.7,-317.2 761.1,-316.8 		"/>
-	</g>
-	<g id="node15">
-		<title>14</title>
-		<path class="st12" d="M488.6-324h-36c-6,0-12,6-12,12v12c0,6,6,12,12,12h36c6,0,12-6,12-12v-12C500.6-318,494.6-324,488.6-324"/>
-		<text transform="matrix(1 0 0 1 450.5554 -303.5)" class="st1 st2">nas_final</text>
-	</g>
-	<g id="edge22">
-		<title>13-&gt;14</title>
-		<path class="st4" d="M546.8-359.8c-12.8,9-28.5,20.1-42.2,29.8"/>
-		<polygon class="st5" points="506.5,-327.1 496.3,-324.2 502.5,-332.8 		"/>
-	</g>
-	<g id="node16">
-		<title>15</title>
-		<path class="st13" d="M598.1-324h-51c-6,0-12,6-12,12v12c0,6,6,12,12,12h51c6,0,12-6,12-12v-12C610.1-318,604.1-324,598.1-324"/>
-		<text transform="matrix(1 0 0 1 545.6096 -303.5)" class="st1 st2">nas_sample</text>
-	</g>
-	<g id="edge23">
-		<title>13-&gt;15</title>
-		<path class="st4" d="M572.6-359.8c0,7.7,0,16.9,0,25.4"/>
-		<polygon class="st5" points="576.1,-334.4 572.6,-324.4 569.1,-334.4 		"/>
-	</g>
-	<g id="edge14">
-		<title>14-&gt;6</title>
-		<path class="st4" d="M470.6-287.8c0,7.7,0,16.9,0,25.4"/>
-		<polygon class="st5" points="474.1,-262.4 470.6,-252.4 467.1,-262.4 		"/>
-	</g>
-	<g id="node17">
-		<title>16</title>
-		<path class="st14" d="M343.6-252h-114c-6,0-12,6-12,12v12c0,6,6,12,12,12h114c6,0,12-6,12-12v-12C355.6-246,349.6-252,343.6-252"
-			/>
-		<text transform="matrix(1 0 0 1 232.1828 -237)" class="st1 st2">variant_effect_prediction</text>
-		<text transform="matrix(1 0 0 1 237.9274 -226)" class="st1 st2">model_type: nas_final</text>
-	</g>
-	<g id="edge24">
-		<title>14-&gt;16</title>
-		<path class="st4" d="M440.2-294.1c-26.5,10.4-65.5,25.6-97.6,38.2"/>
-		<polygon class="st5" points="343.5,-252.5 332.9,-252.1 340.9,-259 		"/>
-	</g>
-	<g id="edge15">
-		<title>15-&gt;6</title>
-		<path class="st4" d="M546.8-287.8c-12.8,9-28.5,20.1-42.2,29.8"/>
-		<polygon class="st5" points="506.5,-255.1 496.3,-252.2 502.5,-260.8 		"/>
-	</g>
-	<g id="node18">
-		<title>17</title>
-		<path class="st14" d="M680.1-252h-115c-6,0-12,6-12,12v12c0,6,6,12,12,12h115c6,0,12-6,12-12v-12C692.1-246,686.1-252,680.1-252"
-			/>
-		<text transform="matrix(1 0 0 1 568.1828 -237)" class="st1 st2">variant_effect_prediction</text>
-		<text transform="matrix(1 0 0 1 566.9816 -226)" class="st1 st2">model_type: nas_sample</text>
-	</g>
-	<g id="edge25">
-		<title>15-&gt;17</title>
-		<path class="st4" d="M585.2-287.8c5.7,8.2,12.5,18.1,18.8,27.1"/>
-		<polygon class="st5" points="607,-262.6 609.8,-252.4 601.2,-258.6 		"/>
-	</g>
-	<g id="edge16">
-		<title>16-&gt;7</title>
-		<path class="st4" d="M308.5-215.8c10.7,8.9,23.8,19.7,35.4,29.3"/>
-		<polygon class="st5" points="346.2,-189.2 351.6,-180.2 341.7,-183.8 		"/>
-	</g>
-	<g id="edge18">
-		<title>16-&gt;9</title>
-		<path class="st4" d="M257-215.8c-15,9.2-33.3,20.5-49.3,30.4"/>
-		<polygon class="st5" points="209.4,-182.4 199.1,-180.2 205.8,-188.4 		"/>
-	</g>
-	<g id="edge20">
-		<title>16-&gt;11</title>
-		<path class="st4" d="M217.1-217c-36.3,9.3-81.5,21.5-130.1,37"/>
-		<polygon class="st5" points="87.8,-176.6 77.2,-176.9 85.7,-183.2 		"/>
-	</g>
-	<g id="edge17">
-		<title>17-&gt;8</title>
-		<path class="st4" d="M643.5-215.8c10.1,8.8,22.4,19.5,33.4,29"/>
-		<polygon class="st5" points="679.4,-189.4 684.6,-180.2 674.8,-184.1 		"/>
-	</g>
-	<g id="edge19">
-		<title>17-&gt;10</title>
-		<path class="st4" d="M601.6-215.8c-10.1,8.8-22.4,19.5-33.4,29"/>
-		<polygon class="st5" points="570.4,-184.1 560.5,-180.2 565.8,-189.4 		"/>
-	</g>
-	<g id="edge21">
-		<title>17-&gt;12</title>
-		<path class="st4" d="M680.4-215.9c29.7,9.5,66.6,21.5,107.8,35.8"/>
-		<polygon class="st5" points="789.6,-183.3 797.9,-176.7 787.3,-176.7 		"/>
-	</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: snakemake_dag Pages: 1 -->
+<svg width="748pt" height="548pt"
+ viewBox="0.00 0.00 747.50 548.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 544)">
+<title>snakemake_dag</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-544 743.5,-544 743.5,4 -4,4"/>
+<!-- 0 -->
+<g id="node1" class="node">
+<title>0</title>
+<path fill="none" stroke="#56d86b" stroke-width="2" d="M215,-36C215,-36 185,-36 185,-36 179,-36 173,-30 173,-24 173,-24 173,-12 173,-12 173,-6 179,0 185,0 185,0 215,0 215,0 221,0 227,-6 227,-12 227,-12 227,-24 227,-24 227,-30 221,-36 215,-36"/>
+<text text-anchor="middle" x="200" y="-15.5" font-family="sans" font-size="10.00" fill="#000000">all</text>
+</g>
+<!-- 1 -->
+<g id="node2" class="node">
+<title>1</title>
+<path fill="none" stroke="#d87d56" stroke-width="2" d="M363.5,-540C363.5,-540 292.5,-540 292.5,-540 286.5,-540 280.5,-534 280.5,-528 280.5,-528 280.5,-516 280.5,-516 280.5,-510 286.5,-504 292.5,-504 292.5,-504 363.5,-504 363.5,-504 369.5,-504 375.5,-510 375.5,-516 375.5,-516 375.5,-528 375.5,-528 375.5,-534 369.5,-540 363.5,-540"/>
+<text text-anchor="middle" x="328" y="-525" font-family="sans" font-size="10.00" fill="#000000">nas_search</text>
+<text text-anchor="middle" x="328" y="-514" font-family="sans" font-size="10.00" fill="#000000">project: test&#45;run</text>
+</g>
+<!-- 1&#45;&gt;0 -->
+<g id="edge1" class="edge">
+<title>1&#45;&gt;0</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M280.2448,-515.3079C236.4089,-507.8901 170.4984,-493.4658 118,-468 58.6557,-439.2134 0,-443.9577 0,-378 0,-378 0,-378 0,-162 0,-116.0242 15.8793,-101.6701 51,-72 83.2415,-44.7622 130.3433,-30.7779 162.9199,-23.9436"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="163.814,-27.3348 172.9491,-21.9682 162.4612,-20.4668 163.814,-27.3348"/>
+</g>
+<!-- 2 -->
+<g id="node3" class="node">
+<title>2</title>
+<path fill="none" stroke="#56d0d8" stroke-width="2" d="M175,-468C175,-468 139,-468 139,-468 133,-468 127,-462 127,-456 127,-456 127,-444 127,-444 127,-438 133,-432 139,-432 139,-432 175,-432 175,-432 181,-432 187,-438 187,-444 187,-444 187,-456 187,-456 187,-462 181,-468 175,-468"/>
+<text text-anchor="middle" x="157" y="-447.5" font-family="sans" font-size="10.00" fill="#000000">nas_final</text>
+</g>
+<!-- 1&#45;&gt;2 -->
+<g id="edge8" class="edge">
+<title>1&#45;&gt;2</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M284.8495,-503.8314C257.709,-492.4038 222.9518,-477.7692 196.53,-466.6442"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="197.7769,-463.3717 187.2023,-462.7168 195.0604,-469.8231 197.7769,-463.3717"/>
+</g>
+<!-- 3 -->
+<g id="node4" class="node">
+<title>3</title>
+<path fill="none" stroke="#56d8b9" stroke-width="2" d="M379.5,-468C379.5,-468 328.5,-468 328.5,-468 322.5,-468 316.5,-462 316.5,-456 316.5,-456 316.5,-444 316.5,-444 316.5,-438 322.5,-432 328.5,-432 328.5,-432 379.5,-432 379.5,-432 385.5,-432 391.5,-438 391.5,-444 391.5,-444 391.5,-456 391.5,-456 391.5,-462 385.5,-468 379.5,-468"/>
+<text text-anchor="middle" x="354" y="-447.5" font-family="sans" font-size="10.00" fill="#000000">nas_sample</text>
+</g>
+<!-- 1&#45;&gt;3 -->
+<g id="edge9" class="edge">
+<title>1&#45;&gt;3</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M334.5609,-503.8314C337.4027,-495.9617 340.7937,-486.5712 343.9419,-477.8533"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="347.2462,-479.0076 347.3508,-468.4133 340.6623,-476.63 347.2462,-479.0076"/>
+</g>
+<!-- 6 -->
+<g id="node7" class="node">
+<title>6</title>
+<path fill="none" stroke="#56d892" stroke-width="2" d="M727.5,-108C727.5,-108 678.5,-108 678.5,-108 672.5,-108 666.5,-102 666.5,-96 666.5,-96 666.5,-84 666.5,-84 666.5,-78 672.5,-72 678.5,-72 678.5,-72 727.5,-72 727.5,-72 733.5,-72 739.5,-78 739.5,-84 739.5,-84 739.5,-96 739.5,-96 739.5,-102 733.5,-108 727.5,-108"/>
+<text text-anchor="middle" x="703" y="-87.5" font-family="sans" font-size="10.00" fill="#000000">plot_search</text>
+</g>
+<!-- 1&#45;&gt;6 -->
+<g id="edge14" class="edge">
+<title>1&#45;&gt;6</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M375.6974,-513.4138C473.9961,-494.3581 690,-444.8762 690,-378 690,-378 690,-378 690,-234 690,-193.7128 695.1097,-147.3414 698.9221,-118.3495"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="702.4313,-118.5175 700.3064,-108.138 695.4947,-117.5772 702.4313,-118.5175"/>
+</g>
+<!-- 2&#45;&gt;0 -->
+<g id="edge2" class="edge">
+<title>2&#45;&gt;0</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M127.2782,-431.8898C92.0313,-407.8777 38,-361.9449 38,-306 38,-306 38,-306 38,-162 38,-115.8034 56.2493,-103.5438 90,-72 110.9438,-52.4256 140.3162,-38.4965 163.4414,-29.693"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="164.7322,-32.9478 172.9269,-26.2324 162.333,-26.3718 164.7322,-32.9478"/>
+</g>
+<!-- 7 -->
+<g id="node8" class="node">
+<title>7</title>
+<path fill="none" stroke="#56a9d8" stroke-width="2" d="M150,-396C150,-396 112,-396 112,-396 106,-396 100,-390 100,-384 100,-384 100,-372 100,-372 100,-366 106,-360 112,-360 112,-360 150,-360 150,-360 156,-360 162,-366 162,-372 162,-372 162,-384 162,-384 162,-390 156,-396 150,-396"/>
+<text text-anchor="middle" x="131" y="-375.5" font-family="sans" font-size="10.00" fill="#000000">plot_final</text>
+</g>
+<!-- 2&#45;&gt;7 -->
+<g id="edge15" class="edge">
+<title>2&#45;&gt;7</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M150.4391,-431.8314C147.5973,-423.9617 144.2063,-414.5712 141.0581,-405.8533"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="144.3377,-404.63 137.6492,-396.4133 137.7538,-407.0076 144.3377,-404.63"/>
+</g>
+<!-- 12 -->
+<g id="node13" class="node">
+<title>12</title>
+<path fill="none" stroke="#567bd8" stroke-width="2" d="M306,-396C306,-396 192,-396 192,-396 186,-396 180,-390 180,-384 180,-384 180,-372 180,-372 180,-366 186,-360 192,-360 192,-360 306,-360 306,-360 312,-360 318,-366 318,-372 318,-372 318,-384 318,-384 318,-390 312,-396 306,-396"/>
+<text text-anchor="middle" x="249" y="-381" font-family="sans" font-size="10.00" fill="#000000">variant_effect_prediction</text>
+<text text-anchor="middle" x="249" y="-370" font-family="sans" font-size="10.00" fill="#000000">model_type: nas_final</text>
+</g>
+<!-- 2&#45;&gt;12 -->
+<g id="edge21" class="edge">
+<title>2&#45;&gt;12</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M180.2155,-431.8314C191.547,-422.9632 205.3464,-412.1637 217.6027,-402.5718"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="220.074,-405.0822 225.7919,-396.1628 215.7598,-399.5697 220.074,-405.0822"/>
+</g>
+<!-- 3&#45;&gt;0 -->
+<g id="edge3" class="edge">
+<title>3&#45;&gt;0</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M391.713,-447.982C468.9666,-441.6062 638,-415.1808 638,-306 638,-306 638,-306 638,-162 638,-77.9372 343.1615,-34.8808 237.2882,-22.1296"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="237.4098,-18.6197 227.0683,-20.9226 236.5888,-25.5714 237.4098,-18.6197"/>
+</g>
+<!-- 3&#45;&gt;7 -->
+<g id="edge16" class="edge">
+<title>3&#45;&gt;7</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M316.3617,-440.4997C281.0617,-431.2364 226.7361,-416.076 171.8103,-396.0775"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="172.8686,-392.7374 162.2753,-392.5583 170.4448,-399.3044 172.8686,-392.7374"/>
+</g>
+<!-- 13 -->
+<g id="node14" class="node">
+<title>13</title>
+<path fill="none" stroke="#567bd8" stroke-width="2" d="M497.5,-396C497.5,-396 382.5,-396 382.5,-396 376.5,-396 370.5,-390 370.5,-384 370.5,-384 370.5,-372 370.5,-372 370.5,-366 376.5,-360 382.5,-360 382.5,-360 497.5,-360 497.5,-360 503.5,-360 509.5,-366 509.5,-372 509.5,-372 509.5,-384 509.5,-384 509.5,-390 503.5,-396 497.5,-396"/>
+<text text-anchor="middle" x="440" y="-381" font-family="sans" font-size="10.00" fill="#000000">variant_effect_prediction</text>
+<text text-anchor="middle" x="440" y="-370" font-family="sans" font-size="10.00" fill="#000000">model_type: nas_sample</text>
+</g>
+<!-- 3&#45;&gt;13 -->
+<g id="edge22" class="edge">
+<title>3&#45;&gt;13</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M375.7014,-431.8314C386.1921,-423.0485 398.9455,-412.3712 410.3194,-402.8489"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="412.8847,-405.2659 418.3055,-396.1628 408.3911,-399.8986 412.8847,-405.2659"/>
+</g>
+<!-- 4 -->
+<g id="node5" class="node">
+<title>4</title>
+<path fill="none" stroke="#d8cb56" stroke-width="2" d="M217,-252C217,-252 183,-252 183,-252 177,-252 171,-246 171,-240 171,-240 171,-228 171,-228 171,-222 177,-216 183,-216 183,-216 217,-216 217,-216 223,-216 229,-222 229,-228 229,-228 229,-240 229,-240 229,-246 223,-252 217,-252"/>
+<text text-anchor="middle" x="200" y="-231.5" font-family="sans" font-size="10.00" fill="#000000">plot_asb</text>
+</g>
+<!-- 4&#45;&gt;0 -->
+<g id="edge4" class="edge">
+<title>4&#45;&gt;0</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M200,-215.9555C200,-178.3938 200,-91.5541 200,-46.4103"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="203.5001,-46.145 200,-36.1451 196.5001,-46.1451 203.5001,-46.145"/>
+</g>
+<!-- 5 -->
+<g id="node6" class="node">
+<title>5</title>
+<path fill="none" stroke="#b6d856" stroke-width="2" d="M327,-108C327,-108 291,-108 291,-108 285,-108 279,-102 279,-96 279,-96 279,-84 279,-84 279,-78 285,-72 291,-72 291,-72 327,-72 327,-72 333,-72 339,-78 339,-84 339,-84 339,-96 339,-96 339,-102 333,-108 327,-108"/>
+<text text-anchor="middle" x="309" y="-87.5" font-family="sans" font-size="10.00" fill="#000000">ldsc_plot</text>
+</g>
+<!-- 5&#45;&gt;0 -->
+<g id="edge5" class="edge">
+<title>5&#45;&gt;0</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M281.4947,-71.8314C267.5766,-62.6377 250.5161,-51.3684 235.6079,-41.5208"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="237.392,-38.5047 227.1189,-35.9134 233.5338,-44.3455 237.392,-38.5047"/>
+</g>
+<!-- 6&#45;&gt;0 -->
+<g id="edge6" class="edge">
+<title>6&#45;&gt;0</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M666.2372,-75.9506C661.493,-74.4561 656.6635,-73.0875 652,-72 500.7575,-36.7313 315.3771,-23.7897 237.3828,-19.6794"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="237.2698,-16.1692 227.1049,-19.1566 236.9142,-23.1601 237.2698,-16.1692"/>
+</g>
+<!-- 7&#45;&gt;0 -->
+<g id="edge7" class="edge">
+<title>7&#45;&gt;0</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M116.1147,-359.5185C108.7538,-349.5296 100.328,-336.6716 95,-324 79.1542,-286.3142 76,-274.8816 76,-234 76,-234 76,-234 76,-162 76,-107.4807 127.6696,-63.3441 164.3017,-38.9035"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="166.2952,-41.7824 172.7877,-33.4099 162.4911,-35.9063 166.2952,-41.7824"/>
+</g>
+<!-- 8 -->
+<g id="node9" class="node">
+<title>8</title>
+<path fill="none" stroke="#8fd856" stroke-width="2" d="M240,-324C240,-324 116,-324 116,-324 110,-324 104,-318 104,-312 104,-312 104,-300 104,-300 104,-294 110,-288 116,-288 116,-288 240,-288 240,-288 246,-288 252,-294 252,-300 252,-300 252,-312 252,-312 252,-318 246,-324 240,-324"/>
+<text text-anchor="middle" x="178" y="-309" font-family="sans" font-size="10.00" fill="#000000">allelic_imbalance_analysis</text>
+<text text-anchor="middle" x="178" y="-298" font-family="sans" font-size="10.00" fill="#000000">binding_type: tf</text>
+</g>
+<!-- 8&#45;&gt;4 -->
+<g id="edge10" class="edge">
+<title>8&#45;&gt;4</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M183.5515,-287.8314C185.9303,-280.0463 188.7638,-270.7729 191.4033,-262.1347"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="194.7987,-262.9996 194.3737,-252.4133 188.1042,-260.954 194.7987,-262.9996"/>
+</g>
+<!-- 9 -->
+<g id="node10" class="node">
+<title>9</title>
+<path fill="none" stroke="#8fd856" stroke-width="2" d="M502,-324C502,-324 378,-324 378,-324 372,-324 366,-318 366,-312 366,-312 366,-300 366,-300 366,-294 372,-288 378,-288 378,-288 502,-288 502,-288 508,-288 514,-294 514,-300 514,-300 514,-312 514,-312 514,-318 508,-324 502,-324"/>
+<text text-anchor="middle" x="440" y="-309" font-family="sans" font-size="10.00" fill="#000000">allelic_imbalance_analysis</text>
+<text text-anchor="middle" x="440" y="-298" font-family="sans" font-size="10.00" fill="#000000">binding_type: tf</text>
+</g>
+<!-- 9&#45;&gt;4 -->
+<g id="edge11" class="edge">
+<title>9&#45;&gt;4</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M379.7477,-287.9243C335.6456,-274.6937 277.0885,-257.1265 238.9823,-245.6947"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="239.8655,-242.3056 229.2815,-242.7844 237.854,-249.0104 239.8655,-242.3056"/>
+</g>
+<!-- 10 -->
+<g id="node11" class="node">
+<title>10</title>
+<path fill="none" stroke="#68d856" stroke-width="2" d="M337.5,-180C337.5,-180 280.5,-180 280.5,-180 274.5,-180 268.5,-174 268.5,-168 268.5,-168 268.5,-156 268.5,-156 268.5,-150 274.5,-144 280.5,-144 280.5,-144 337.5,-144 337.5,-144 343.5,-144 349.5,-150 349.5,-156 349.5,-156 349.5,-168 349.5,-168 349.5,-174 343.5,-180 337.5,-180"/>
+<text text-anchor="middle" x="309" y="-159.5" font-family="sans" font-size="10.00" fill="#000000">ldsc_tau_star</text>
+</g>
+<!-- 10&#45;&gt;5 -->
+<g id="edge12" class="edge">
+<title>10&#45;&gt;5</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M309,-143.8314C309,-136.131 309,-126.9743 309,-118.4166"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="312.5001,-118.4132 309,-108.4133 305.5001,-118.4133 312.5001,-118.4132"/>
+</g>
+<!-- 11 -->
+<g id="node12" class="node">
+<title>11</title>
+<path fill="none" stroke="#68d856" stroke-width="2" d="M517.5,-180C517.5,-180 460.5,-180 460.5,-180 454.5,-180 448.5,-174 448.5,-168 448.5,-168 448.5,-156 448.5,-156 448.5,-150 454.5,-144 460.5,-144 460.5,-144 517.5,-144 517.5,-144 523.5,-144 529.5,-150 529.5,-156 529.5,-156 529.5,-168 529.5,-168 529.5,-174 523.5,-180 517.5,-180"/>
+<text text-anchor="middle" x="489" y="-159.5" font-family="sans" font-size="10.00" fill="#000000">ldsc_tau_star</text>
+</g>
+<!-- 11&#45;&gt;5 -->
+<g id="edge13" class="edge">
+<title>11&#45;&gt;5</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M448.1552,-145.6621C418.3341,-133.7336 378.1266,-117.6507 348.6001,-105.84"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="349.6113,-102.4749 339.0266,-102.0106 347.0115,-108.9743 349.6113,-102.4749"/>
+</g>
+<!-- 12&#45;&gt;8 -->
+<g id="edge17" class="edge">
+<title>12&#45;&gt;8</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M231.0837,-359.8314C222.6558,-351.2848 212.459,-340.9443 203.264,-331.6198"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="205.6711,-329.0761 196.1575,-324.4133 200.6869,-333.9912 205.6711,-329.0761"/>
+</g>
+<!-- 16 -->
+<g id="node17" class="node">
+<title>16</title>
+<path fill="none" stroke="#d85656" stroke-width="2" d="M335.5,-324C335.5,-324 282.5,-324 282.5,-324 276.5,-324 270.5,-318 270.5,-312 270.5,-312 270.5,-300 270.5,-300 270.5,-294 276.5,-288 282.5,-288 282.5,-288 335.5,-288 335.5,-288 341.5,-288 347.5,-294 347.5,-300 347.5,-300 347.5,-312 347.5,-312 347.5,-318 341.5,-324 335.5,-324"/>
+<text text-anchor="middle" x="309" y="-303.5" font-family="sans" font-size="10.00" fill="#000000">ldsc_l2_step</text>
+</g>
+<!-- 12&#45;&gt;16 -->
+<g id="edge25" class="edge">
+<title>12&#45;&gt;16</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M264.1405,-359.8314C271.1217,-351.454 279.5391,-341.3531 287.1876,-332.1749"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="289.9425,-334.3362 293.6556,-324.4133 284.5649,-329.8548 289.9425,-334.3362"/>
+</g>
+<!-- 13&#45;&gt;9 -->
+<g id="edge18" class="edge">
+<title>13&#45;&gt;9</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M440,-359.8314C440,-352.131 440,-342.9743 440,-334.4166"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="443.5001,-334.4132 440,-324.4133 436.5001,-334.4133 443.5001,-334.4132"/>
+</g>
+<!-- 17 -->
+<g id="node18" class="node">
+<title>17</title>
+<path fill="none" stroke="#d85656" stroke-width="2" d="M597.5,-324C597.5,-324 544.5,-324 544.5,-324 538.5,-324 532.5,-318 532.5,-312 532.5,-312 532.5,-300 532.5,-300 532.5,-294 538.5,-288 544.5,-288 544.5,-288 597.5,-288 597.5,-288 603.5,-288 609.5,-294 609.5,-300 609.5,-300 609.5,-312 609.5,-312 609.5,-318 603.5,-324 597.5,-324"/>
+<text text-anchor="middle" x="571" y="-303.5" font-family="sans" font-size="10.00" fill="#000000">ldsc_l2_step</text>
+</g>
+<!-- 13&#45;&gt;17 -->
+<g id="edge26" class="edge">
+<title>13&#45;&gt;17</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M473.0568,-359.8314C489.9677,-350.5368 510.7385,-339.1208 528.7941,-329.1971"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="530.876,-332.0468 537.9537,-324.1628 527.5043,-325.9122 530.876,-332.0468"/>
+</g>
+<!-- 14 -->
+<g id="node15" class="node">
+<title>14</title>
+<path fill="none" stroke="#d8a456" stroke-width="2" d="M337,-252C337,-252 281,-252 281,-252 275,-252 269,-246 269,-240 269,-240 269,-228 269,-228 269,-222 275,-216 281,-216 281,-216 337,-216 337,-216 343,-216 349,-222 349,-228 349,-228 349,-240 349,-240 349,-246 343,-252 337,-252"/>
+<text text-anchor="middle" x="309" y="-231.5" font-family="sans" font-size="10.00" fill="#000000">ldsc_h2_step</text>
+</g>
+<!-- 14&#45;&gt;10 -->
+<g id="edge19" class="edge">
+<title>14&#45;&gt;10</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M309,-215.8314C309,-208.131 309,-198.9743 309,-190.4166"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="312.5001,-190.4132 309,-180.4133 305.5001,-190.4133 312.5001,-190.4132"/>
+</g>
+<!-- 15 -->
+<g id="node16" class="node">
+<title>15</title>
+<path fill="none" stroke="#d8a456" stroke-width="2" d="M598,-252C598,-252 542,-252 542,-252 536,-252 530,-246 530,-240 530,-240 530,-228 530,-228 530,-222 536,-216 542,-216 542,-216 598,-216 598,-216 604,-216 610,-222 610,-228 610,-228 610,-240 610,-240 610,-246 604,-252 598,-252"/>
+<text text-anchor="middle" x="570" y="-231.5" font-family="sans" font-size="10.00" fill="#000000">ldsc_h2_step</text>
+</g>
+<!-- 15&#45;&gt;11 -->
+<g id="edge20" class="edge">
+<title>15&#45;&gt;11</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M549.5603,-215.8314C539.6795,-207.0485 527.6676,-196.3712 516.955,-186.8489"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="519.2326,-184.1906 509.4332,-180.1628 514.582,-189.4224 519.2326,-184.1906"/>
+</g>
+<!-- 16&#45;&gt;14 -->
+<g id="edge23" class="edge">
+<title>16&#45;&gt;14</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M309,-287.8314C309,-280.131 309,-270.9743 309,-262.4166"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="312.5001,-262.4132 309,-252.4133 305.5001,-262.4133 312.5001,-262.4132"/>
+</g>
+<!-- 17&#45;&gt;15 -->
+<g id="edge24" class="edge">
+<title>17&#45;&gt;15</title>
+<path fill="none" stroke="#c0c0c0" stroke-width="2" d="M570.7477,-287.8314C570.6407,-280.131 570.5135,-270.9743 570.3947,-262.4166"/>
+<polygon fill="#c0c0c0" stroke="#c0c0c0" stroke-width="2" points="573.8944,-262.3637 570.2557,-252.4133 566.8951,-262.4609 573.8944,-262.3637"/>
+</g>
 </g>
 </svg>

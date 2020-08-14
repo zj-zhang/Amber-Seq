@@ -1,7 +1,9 @@
-# BioNAS-DeepSEA
-Applying Neural Architecture Search to DeepSEA Genomic sequences modelling
-Zijun Zhang
-March, 2020
+# Amber-Seq
+A Snakemake Pipeline for Applying [AMBER](https://github.com/zj-zhang/AMBER) to Genomic Sequences Modelling
 
-![Pipeline example](https://github.com/zj-zhang/BioNAS-DeepSEA/blob/master/img/test-run.png)
+Author: Zijun Zhang
+
+Initial: March, 2020; Last updated: August, 2020
+
+![Pipeline example](https://github.com/zj-zhang/Amber-Seq/blob/master/img/test-run.png)
 
